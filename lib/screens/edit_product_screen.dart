@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../providers/product.dart';
+import '../models/product.dart';
 import '../providers/products.dart';
 
 class EditProductScreen extends StatefulWidget {
@@ -74,17 +74,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  void _saveForm() async {
     final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
     _form.currentState!.save();
     if (_editedProduct.id.isNotEmpty) {
-      context.read<Products>().updateProduct(_editedProduct.id, _editedProduct);
+      await context
+          .read<Products>()
+          .updateProduct(_editedProduct.id, _editedProduct);
     } else {
-      context.read<Products>().addProduct(_editedProduct);
+      await context.read<Products>().addProduct(_editedProduct);
     }
+
     Navigator.of(context).pop();
   }
 
