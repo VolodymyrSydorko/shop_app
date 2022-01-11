@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart.dart';
@@ -11,7 +13,15 @@ import 'package:shop_app/screens/products_overview_screen.dart';
 import 'package:shop_app/screens/user_products_screen.dart';
 import 'package:shop_app/services/services.dart';
 
-void main() {
+import 'providers/auth.dart';
+import 'screens/auth_screen.dart';
+import 'screens/splash_screen.dart';
+import 'services/api/user_repository.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   runApp(const MyApp());
 }
 
@@ -23,25 +33,40 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-          create: (ctx) => Products(
+          create: (_) => Auth(
+            userRepository: UserRepository(firebaseAuth: FirebaseAuth.instance),
+          ),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => Products(
               productsRepository: ProductsRepository(apiClient: ApiClient())),
         ),
         ChangeNotifierProvider(
-          create: (ctx) => Cart(),
+          create: (_) => Cart(),
         ),
         ChangeNotifierProvider(
-          create: (ctx) => Orders(),
+          create: (_) => Orders(),
         ),
       ],
-      child: MaterialApp(
+      child: Selector<Auth, bool>(
+        selector: (_, auth) => auth.isAuth,
+        builder: (context, isAuth, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
-          title: 'Flutter Demo',
+          title: 'MyShop',
           theme: ThemeData(
             colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.purple)
                 .copyWith(secondary: Colors.deepOrange),
             fontFamily: 'Lato',
           ),
-          home: const ProductOverviewScreen(),
+          home: isAuth
+              ? const ProductOverviewScreen()
+              : FutureBuilder(
+                  future: context.read<Auth>().tryAutoLogin(),
+                  builder: (_, authResult) =>
+                      authResult.connectionState == ConnectionState.waiting
+                          ? const SplashScreen()
+                          : const AuthScreen(),
+                ),
           routes: {
             ProductDetailScreen.routeName: (context) =>
                 const ProductDetailScreen(),
@@ -50,7 +75,9 @@ class MyApp extends StatelessWidget {
             UserProductsScreen.routeName: (context) =>
                 const UserProductsScreen(),
             EditProductScreen.routeName: (context) => const EditProductScreen(),
-          }),
+          },
+        ),
+      ),
     );
   }
 }

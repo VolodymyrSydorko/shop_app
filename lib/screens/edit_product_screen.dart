@@ -97,9 +97,25 @@ class _EditProductScreenState extends State<EditProductScreen> {
       appBar: AppBar(
         title: const Text('Edit Product'),
         actions: <Widget>[
-          IconButton(
-            icon: const Icon(Icons.save),
-            onPressed: _saveForm,
+          Consumer<Products>(
+            builder: (context, products, child) {
+              return MaterialButton(
+                minWidth: 40,
+                textColor: Colors.white,
+                onPressed: _saveForm,
+                child: products.isLoading
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          valueColor:
+                              AlwaysStoppedAnimation<Color>(Colors.white),
+                          strokeWidth: 2,
+                        ),
+                      )
+                    : const Icon(Icons.save),
+              );
+            },
           ),
         ],
       ),

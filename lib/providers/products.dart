@@ -47,12 +47,16 @@ class Products with ChangeNotifier {
   }
 
   Future toggleFavoriteStatus(Product product) async {
-    setBusy(true);
-
     product.toggleFavoriteStatus();
-    await updateProduct(product.id, product);
 
-    setBusy(false);
+    final index = _products.indexOf(findById(product.id));
+    if (index >= 0) {
+      _products[index] = product;
+    }
+
+    notifyListeners();
+
+    await productsRepository.updateProduct(product.id, product);
   }
 
   Future updateProduct(String id, Product editedProduct) async {
