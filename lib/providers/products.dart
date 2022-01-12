@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/models/product.dart';
+import 'package:shop_app/models/user_profile.dart';
 import 'package:shop_app/services/api/products_repository.dart';
 
 class Products with ChangeNotifier {
   final ProductsRepository productsRepository;
+  UserProfile? profile;
 
   Products({required this.productsRepository});
 
@@ -21,15 +23,21 @@ class Products with ChangeNotifier {
 
   Future<List<Product>> getAllProducts() async {
     try {
-      _isLoading = true;
-
-      notifyListeners();
-
       _products = await productsRepository
           .getAllProducts()
           .onError((error, stackTrace) => []);
 
-      setBusy(false);
+      return Future.value(_products);
+    } catch (err) {
+      return Future.error(err);
+    }
+  }
+
+  Future<List<Product>> getMyProducts() async {
+    try {
+      _products = await productsRepository
+          .getAllProducts(userId: profile!.userId)
+          .onError((error, stackTrace) => []);
 
       return Future.value(_products);
     } catch (err) {
@@ -40,7 +48,8 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     setBusy(true);
 
-    final newProduct = await productsRepository.addProduct(product);
+    final newProduct =
+        await productsRepository.addProduct(product, profile!.userId);
     _products.add(newProduct);
 
     setBusy(false);

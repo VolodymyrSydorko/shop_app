@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 
 import 'package:shop_app/models/product.dart';
-import 'api_client.dart';
+
+import '../services.dart';
 import 'endpoints.dart';
 
 class ProductsRepository {
@@ -9,10 +10,13 @@ class ProductsRepository {
 
   ProductsRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
-  Future<List<Product>> getAllProducts() async {
+  Future<List<Product>> getAllProducts({String? userId}) async {
+    final filterString =
+        userId != null ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+
     try {
-      final response = (await _apiClient.dio
-              .get<Map<String, dynamic>?>('${Endpoints.products}.json'))
+      final response = (await _apiClient.dio.get<Map<String, dynamic>?>(
+              '${Endpoints.products}.json?$filterString'))
           .data;
 
       if (response == null) {
@@ -33,11 +37,11 @@ class ProductsRepository {
     }
   }
 
-  Future<Product> addProduct(Product product) async {
+  Future<Product> addProduct(Product product, String userId) async {
     try {
       final response = (await _apiClient.dio.post<Map<String, dynamic>>(
               '${Endpoints.products}.json',
-              data: product.toJson()))
+              data: product.toJson()..['creatorId'] = userId))
           .data!;
 
       return product.copyWith(id: response['name']);

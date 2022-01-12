@@ -6,8 +6,6 @@ class UserRepository {
   UserRepository({required FirebaseAuth firebaseAuth})
       : _firebaseAuth = firebaseAuth;
 
-  User? get user => _firebaseAuth.currentUser;
-
   Future<UserCredential> signInWithEmailAndPassword(
       String email, String password) {
     return _firebaseAuth.signInWithEmailAndPassword(
@@ -22,6 +20,8 @@ class UserRepository {
   Future<void> signOut() {
     return _firebaseAuth.signOut();
   }
+
+  User? getUser() => _firebaseAuth.currentUser;
 
   bool isSignedIn() {
     return _firebaseAuth.currentUser != null;

@@ -14,19 +14,22 @@ class EditProductScreen extends StatefulWidget {
 }
 
 class _EditProductScreenState extends State<EditProductScreen> {
-  final _priceFocusNode = FocusNode();
-  final _descriptionFocusNode = FocusNode();
-  final _imageUrlController = TextEditingController();
-  final _imageUrlFocusNode = FocusNode();
-  final _form = GlobalKey<FormState>();
-
   var _editedProduct = Product(
     id: '',
-    title: '',
-    price: 0,
-    description: '',
-    imageUrl: '',
+    title: 'test product',
+    price: 1,
+    description: 'description',
+    imageUrl:
+        'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
   );
+
+  final _priceFocusNode = FocusNode();
+  final _descriptionFocusNode = FocusNode();
+  final _imageUrlController = TextEditingController(
+      text:
+          'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg');
+  final _imageUrlFocusNode = FocusNode();
+  final _form = GlobalKey<FormState>();
 
   var _isInit = true;
 

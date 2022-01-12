@@ -24,16 +24,10 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(
-      Duration.zero,
-      () => context.read<Products>().getAllProducts(),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
-    final isLoading = context.select((Products products) => products.isLoading);
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Shop'),
@@ -78,9 +72,13 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
         ],
       ),
       drawer: const AppDrawer(),
-      body: isLoading
-          ? const Center(child: CircularProgressIndicator())
-          : ProductsGrid(_showOnlyFavorites),
+      body: FutureBuilder(
+        future: context.read<Products>().getAllProducts(),
+        builder: (context, snapshot) =>
+            snapshot.connectionState == ConnectionState.waiting
+                ? const Center(child: CircularProgressIndicator())
+                : ProductsGrid(_showOnlyFavorites),
+      ),
     );
   }
 }

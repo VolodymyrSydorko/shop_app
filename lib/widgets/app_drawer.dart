@@ -48,7 +48,10 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.edit),
             title: const Text('Log Out'),
             onTap: () async {
-              await context.read<Auth>().logout();
+              Navigator.of(context).pop();
+              Navigator.of(context).pushReplacementNamed('/');
+
+              context.read<Auth>().logout();
             },
           ),
         ],

@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shop_app/models/user_profile.dart';
 import 'package:shop_app/services/api/user_repository.dart';
 
 class Auth with ChangeNotifier {
-  static const String _tokenKey = 'uid';
+  static const String _userProfileKey = 'userProfile';
 
   final UserRepository userRepository;
 
@@ -12,19 +15,20 @@ class Auth with ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  String? _uid;
-  String? get uid => _uid;
+  UserProfile? _profile;
+  UserProfile? get profile => _profile;
 
-  bool get isAuth => _uid != null;
+  bool get isAuth => _profile != null;
 
   Future<bool> tryAutoLogin() async {
     final prefs = await SharedPreferences.getInstance();
 
-    if (!prefs.containsKey(_tokenKey)) {
+    if (!prefs.containsKey(_userProfileKey)) {
       return false;
     }
 
-    _uid = prefs.getString(_tokenKey);
+    _profile = UserProfile.fromJson(
+        json.decode(prefs.getString(_userProfileKey) ?? '{}'));
 
     notifyListeners();
 
@@ -40,9 +44,16 @@ class Auth with ChangeNotifier {
       await userRepository.signInWithEmailAndPassword(email, password);
 
       if (userRepository.isSignedIn()) {
-        _uid = userRepository.user!.uid;
+        final user = userRepository.getUser();
+        final tokenInfo = await user?.getIdTokenResult();
 
-        prefs.setString(_tokenKey, _uid!);
+        _profile = UserProfile(
+          token: tokenInfo!.token!,
+          userId: user!.uid,
+          expiryDate: tokenInfo.expirationTime!,
+        );
+
+        prefs.setString(_userProfileKey, json.encode(_profile!.toJson()));
       }
     } catch (e) {
       rethrow;
@@ -60,9 +71,16 @@ class Auth with ChangeNotifier {
       await userRepository.signUp(email, password);
 
       if (userRepository.isSignedIn()) {
-        _uid = userRepository.user!.uid;
+        final user = userRepository.getUser();
+        final tokenInfo = await user?.getIdTokenResult();
 
-        prefs.setString(_tokenKey, _uid!);
+        _profile = UserProfile(
+          token: tokenInfo!.token!,
+          userId: user!.uid,
+          expiryDate: tokenInfo.expirationTime!,
+        );
+
+        prefs.setString(_userProfileKey, json.encode(_profile!.toJson()));
       }
     } catch (e) {
       rethrow;
@@ -74,11 +92,11 @@ class Auth with ChangeNotifier {
   Future<void> logout() async {
     final prefs = await SharedPreferences.getInstance();
 
-    if (prefs.containsKey(_tokenKey)) {
-      prefs.remove(_tokenKey);
+    if (prefs.containsKey(_userProfileKey)) {
+      prefs.remove(_userProfileKey);
     }
 
-    _uid = null;
+    _profile = null;
 
     notifyListeners();
   }
