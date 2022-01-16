@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 class ProductItem extends StatelessWidget {
   final String id;
   final String title;
-  final String imageUrl;
+  final String imagePath;
+  final String? base64Url;
   final bool isFavorite;
   final void Function() onTap;
   final void Function() onCartPressed;
@@ -14,7 +17,8 @@ class ProductItem extends StatelessWidget {
     Key? key,
     required this.id,
     required this.title,
-    required this.imageUrl,
+    required this.imagePath,
+    this.base64Url,
     required this.isFavorite,
     required this.onTap,
     required this.onCartPressed,
@@ -29,7 +33,19 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         child: GestureDetector(
           onTap: onTap,
-          child: Image.network(imageUrl, fit: BoxFit.cover),
+          child: base64Url == null
+              ? Image.network(
+                  imagePath,
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Icon(Icons.camera_alt_outlined),
+                )
+              : Image.memory(
+                  base64Decode(base64Url!),
+                  fit: BoxFit.cover,
+                  errorBuilder: (context, error, stackTrace) =>
+                      const Icon(Icons.camera_alt_outlined),
+                ),
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black38,

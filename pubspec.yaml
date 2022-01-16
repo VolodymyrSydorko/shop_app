@@ -38,7 +38,10 @@ dependencies:
   font_awesome_flutter: ^9.2.0
 
   #routing
-  auto_route: ^3.2.1  
+  auto_route: ^3.2.1 
+
+  #image picker
+  image_picker: ^0.8.4+4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -50,6 +53,8 @@ dev_dependencies:
   flutter_lints: ^1.0.4
 
 flutter:
+  assets:
+    - assets/
   uses-material-design: true
 
   fonts:

@@ -1,9 +1,10 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/products.dart';
-import 'package:shop_app/screens/product_detail_screen.dart';
+import 'package:shop_app/router/router.gr.dart';
 import 'package:shop_app/widgets/product_item.dart';
 
 class ProductsGrid extends StatelessWidget {
@@ -38,13 +39,11 @@ class ProductsGrid extends StatelessWidget {
         return ProductItem(
           id: product.id,
           title: product.title,
-          imageUrl: product.imageUrl,
+          imagePath: product.imagePath,
+          base64Url: product.base64Url,
           isFavorite: product.isFavorite,
           onTap: () {
-            Navigator.of(context).pushNamed(
-              ProductDetailScreen.routeName,
-              arguments: product.id,
-            );
+            context.router.push(ProductDetailRoute(productId: product.id));
           },
           onCartPressed: () {
             cart.addItem(product.id, product.title, product.price);

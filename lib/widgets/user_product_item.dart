@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -8,23 +10,26 @@ import '../providers/products.dart';
 class UserProductItem extends StatelessWidget {
   final String id;
   final String title;
-  final String imageUrl;
+  final String imagePath;
+  final String? base64Url;
 
   const UserProductItem(
     this.id,
     this.title,
-    this.imageUrl, {
+    this.imagePath, {
     Key? key,
+    this.base64Url,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final products = context.read<Products>();
-
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(
-        backgroundImage: NetworkImage(imageUrl),
+        backgroundImage: base64Url == null
+            ? NetworkImage(imagePath)
+            : MemoryImage(base64Decode(base64Url!)) as ImageProvider,
       ),
       trailing: SizedBox(
         width: 100,

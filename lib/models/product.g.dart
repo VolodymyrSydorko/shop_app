@@ -7,11 +7,13 @@ part of 'product.dart';
 // **************************************************************************
 
 abstract class _$ProductCWProxy {
+  Product base64Url(String? base64Url);
+
   Product description(String description);
 
   Product id(String id);
 
-  Product imageUrl(String imageUrl);
+  Product imagePath(String imagePath);
 
   Product isFavorite(bool isFavorite);
 
@@ -26,9 +28,10 @@ abstract class _$ProductCWProxy {
   /// Product(...).copyWith(id: 12, name: "My name")
   /// ````
   Product call({
+    String? base64Url,
     String? description,
     String? id,
-    String? imageUrl,
+    String? imagePath,
     bool? isFavorite,
     double? price,
     String? title,
@@ -42,13 +45,16 @@ class _$ProductCWProxyImpl implements _$ProductCWProxy {
   const _$ProductCWProxyImpl(this._value);
 
   @override
+  Product base64Url(String? base64Url) => this(base64Url: base64Url);
+
+  @override
   Product description(String description) => this(description: description);
 
   @override
   Product id(String id) => this(id: id);
 
   @override
-  Product imageUrl(String imageUrl) => this(imageUrl: imageUrl);
+  Product imagePath(String imagePath) => this(imagePath: imagePath);
 
   @override
   Product isFavorite(bool isFavorite) => this(isFavorite: isFavorite);
@@ -68,14 +74,19 @@ class _$ProductCWProxyImpl implements _$ProductCWProxy {
   /// Product(...).copyWith(id: 12, name: "My name")
   /// ````
   Product call({
+    Object? base64Url = const $CopyWithPlaceholder(),
     Object? description = const $CopyWithPlaceholder(),
     Object? id = const $CopyWithPlaceholder(),
-    Object? imageUrl = const $CopyWithPlaceholder(),
+    Object? imagePath = const $CopyWithPlaceholder(),
     Object? isFavorite = const $CopyWithPlaceholder(),
     Object? price = const $CopyWithPlaceholder(),
     Object? title = const $CopyWithPlaceholder(),
   }) {
     return Product(
+      base64Url: base64Url == const $CopyWithPlaceholder()
+          ? _value.base64Url
+          // ignore: cast_nullable_to_non_nullable
+          : base64Url as String?,
       description: description == const $CopyWithPlaceholder()
           ? _value.description
           // ignore: cast_nullable_to_non_nullable
@@ -84,10 +95,10 @@ class _$ProductCWProxyImpl implements _$ProductCWProxy {
           ? _value.id
           // ignore: cast_nullable_to_non_nullable
           : id as String,
-      imageUrl: imageUrl == const $CopyWithPlaceholder()
-          ? _value.imageUrl
+      imagePath: imagePath == const $CopyWithPlaceholder()
+          ? _value.imagePath
           // ignore: cast_nullable_to_non_nullable
-          : imageUrl as String,
+          : imagePath as String,
       isFavorite: isFavorite == const $CopyWithPlaceholder()
           ? _value.isFavorite
           // ignore: cast_nullable_to_non_nullable
@@ -117,7 +128,8 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       title: json['title'] as String,
       description: json['description'] as String,
       price: (json['price'] as num).toDouble(),
-      imageUrl: json['imageUrl'] as String,
+      imagePath: json['imagePath'] as String,
+      base64Url: json['base64Url'] as String?,
       isFavorite: json['isFavorite'] as bool? ?? false,
     );
 
@@ -125,6 +137,7 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'title': instance.title,
       'description': instance.description,
       'price': instance.price,
-      'imageUrl': instance.imageUrl,
+      'imagePath': instance.imagePath,
+      'base64Url': instance.base64Url,
       'isFavorite': instance.isFavorite,
     };

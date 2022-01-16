@@ -48,7 +48,7 @@ class Products with ChangeNotifier {
   Future<void> addProduct(Product product) async {
     setBusy(true);
 
-    final newProduct =
+    final Product newProduct =
         await productsRepository.addProduct(product, profile!.userId);
     _products.add(newProduct);
 

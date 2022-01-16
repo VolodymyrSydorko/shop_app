@@ -11,7 +11,8 @@ class Product {
   final String title;
   final String description;
   final double price;
-  final String imageUrl;
+  final String imagePath;
+  final String? base64Url;
   bool isFavorite;
 
   Product({
@@ -19,7 +20,8 @@ class Product {
     required this.title,
     required this.description,
     required this.price,
-    required this.imageUrl,
+    required this.imagePath,
+    this.base64Url,
     this.isFavorite = false,
   });
 

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -29,10 +31,19 @@ class ProductDetailScreen extends StatelessWidget {
             SizedBox(
               height: 300,
               width: double.infinity,
-              child: Image.network(
-                loadedProduct.imageUrl,
-                fit: BoxFit.cover,
-              ),
+              child: loadedProduct.base64Url == null
+                  ? Image.network(
+                      loadedProduct.imagePath,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.camera_alt_outlined),
+                    )
+                  : Image.memory(
+                      base64Decode(loadedProduct.base64Url!),
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.camera_alt_outlined),
+                    ),
             ),
             const SizedBox(height: 10),
             Text(
