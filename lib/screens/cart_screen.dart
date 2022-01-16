@@ -5,9 +5,10 @@ import 'package:shop_app/providers/orders.dart';
 import 'package:shop_app/widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
-  const CartScreen({Key? key}) : super(key: key);
+  static const routeName = 'CartRoute';
+  static const routePath = '/cart';
 
-  static const routeName = '/cart';
+  const CartScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -50,19 +51,20 @@ class CartScreen extends StatelessWidget {
           ),
           const SizedBox(height: 10),
           Expanded(
-              child: ListView.builder(
-                  itemBuilder: (context, i) {
-                    final cartItem = cart.items.values.elementAt(i);
+            child: ListView.builder(
+                itemBuilder: (context, i) {
+                  final cartItem = cart.items.values.elementAt(i);
 
-                    return CartItem(
-                      cartItem.id,
-                      cart.items.keys.elementAt(i),
-                      cartItem.price,
-                      cartItem.quantity,
-                      cartItem.title,
-                    );
-                  },
-                  itemCount: cart.items.length))
+                  return CartItem(
+                    cartItem.id,
+                    cart.items.keys.elementAt(i),
+                    cartItem.price,
+                    cartItem.quantity,
+                    cartItem.title,
+                  );
+                },
+                itemCount: cart.items.length),
+          )
         ],
       ),
     );

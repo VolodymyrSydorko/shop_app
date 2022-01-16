@@ -1,24 +1,26 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/products.dart';
-import 'package:shop_app/screens/cart_screen.dart';
+import 'package:shop_app/router/router.gr.dart';
 import 'package:shop_app/widgets/app_drawer.dart';
 import 'package:shop_app/widgets/badge.dart';
 import 'package:shop_app/widgets/products_grid.dart';
 
 enum FilterOptions { favorites, all }
 
-class ProductOverviewScreen extends StatefulWidget {
-  const ProductOverviewScreen({Key? key}) : super(key: key);
+class ProductsOverviewScreen extends StatefulWidget {
+  static const routeName = 'ProductOverviewRoute';
+  static const routePath = '/overview-products';
 
-  static const routeName = '/overview-products';
+  const ProductsOverviewScreen({Key? key}) : super(key: key);
 
   @override
-  State<ProductOverviewScreen> createState() => _ProductOverviewScreenState();
+  State<ProductsOverviewScreen> createState() => _ProductsOverviewScreenState();
 }
 
-class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
+class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
   bool _showOnlyFavorites = false;
 
   @override
@@ -64,8 +66,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
               value: cart.itemCount.toString(),
             ),
             child: IconButton(
-              onPressed: () =>
-                  {Navigator.of(context).pushNamed(CartScreen.routeName)},
+              onPressed: () => {context.router.push(const CartRoute())},
               icon: const Icon(Icons.shopping_cart),
             ),
           ),

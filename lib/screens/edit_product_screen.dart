@@ -1,3 +1,4 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -5,9 +6,15 @@ import '../models/product.dart';
 import '../providers/products.dart';
 
 class EditProductScreen extends StatefulWidget {
-  static const routeName = '/edit-product';
+  static const routeName = 'EditProductRoute';
+  static const routePath = ':productId';
 
-  const EditProductScreen({Key? key}) : super(key: key);
+  final String? productId;
+
+  const EditProductScreen({
+    Key? key,
+    @PathParam() this.productId,
+  }) : super(key: key);
 
   @override
   _EditProductScreenState createState() => _EditProductScreenState();
@@ -42,10 +49,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
   @override
   void didChangeDependencies() {
     if (_isInit) {
-      final productId = ModalRoute.of(context)!.settings.arguments as String?;
-
-      if (productId != null) {
-        _editedProduct = context.read<Products>().findById(productId);
+      if (widget.productId != null) {
+        _editedProduct = context.read<Products>().findById(widget.productId!);
         _imageUrlController.text = _editedProduct.imageUrl;
       }
     }
@@ -91,7 +96,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
       await context.read<Products>().addProduct(_editedProduct);
     }
 
-    Navigator.of(context).pop();
+    context.router.pop();
   }
 
   @override

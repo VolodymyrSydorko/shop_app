@@ -6,7 +6,8 @@ import '../widgets/order_item.dart';
 import '../widgets/app_drawer.dart';
 
 class OrdersScreen extends StatelessWidget {
-  static const routeName = '/orders';
+  static const routeName = 'OrdersRoute';
+  static const routePath = '/orders';
 
   const OrdersScreen({Key? key}) : super(key: key);
 

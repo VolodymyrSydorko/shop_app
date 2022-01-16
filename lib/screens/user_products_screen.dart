@@ -1,6 +1,7 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/screens/edit_product_screen.dart';
+import 'package:shop_app/router/router.gr.dart';
 
 import '../providers/products.dart';
 import '../widgets/user_product_item.dart';
@@ -8,7 +9,8 @@ import '../widgets/app_drawer.dart';
 //import './edit_product_screen.dart';
 
 class UserProductsScreen extends StatelessWidget {
-  static const routeName = '/user-products';
+  static const routeName = 'UserProductsRoute';
+  static const routePath = '/user-products';
 
   const UserProductsScreen({Key? key}) : super(key: key);
 
@@ -21,7 +23,7 @@ class UserProductsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              Navigator.of(context).pushNamed(EditProductScreen.routeName);
+              context.router.push(EditProductRoute());
             },
           ),
         ],

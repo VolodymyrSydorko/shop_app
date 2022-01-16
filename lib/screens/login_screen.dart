@@ -1,19 +1,22 @@
 import 'dart:math';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/router/router.gr.dart';
 import 'package:shop_app/widgets/app_form_item.dart';
 
 import '../providers/auth.dart';
 
 enum AuthMode { signup, login }
 
-class AuthScreen extends StatelessWidget {
-  static const routeName = '/auth';
+class LoginScreen extends StatelessWidget {
+  static const routeName = 'LoginRoute';
+  static const routePath = '/login';
 
-  const AuthScreen({Key? key}) : super(key: key);
+  const LoginScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -173,7 +176,7 @@ class _AuthCardState extends State<AuthCard> {
         if (_authMode == AuthMode.login) {
           await context
               .read<Auth>()
-              .authentication(_authData['email']!, _authData['password']!);
+              .login(_authData['email']!, _authData['password']!);
         } else {
           await context
               .read<Auth>()
@@ -183,6 +186,8 @@ class _AuthCardState extends State<AuthCard> {
         _showErrorDialog(e.toString());
       }
     }
+
+    context.router.replace(const ProductOverviewRoute());
   }
 
   void _switchAuthMode() {

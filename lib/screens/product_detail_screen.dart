@@ -1,16 +1,22 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../providers/products.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  static const routeName = '/product-detail';
+  static const routeName = 'ProductDetailRoute';
+  static const routePath = ':productId';
 
-  const ProductDetailScreen({Key? key}) : super(key: key);
+  final String productId;
+
+  const ProductDetailScreen({
+    Key? key,
+    @PathParam() required this.productId,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final productId = ModalRoute.of(context)!.settings.arguments as String;
     final loadedProduct = context.read<Products>().findById(productId);
 
     return Scaffold(

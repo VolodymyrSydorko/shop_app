@@ -1,9 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/providers/auth.dart';
-import 'package:shop_app/screens/user_products_screen.dart';
-
-import '../screens/orders_screen.dart';
+import 'package:shop_app/router/router.gr.dart';
 
 class AppDrawer extends StatelessWidget {
   const AppDrawer({Key? key}) : super(key: key);
@@ -22,7 +21,7 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.shop),
             title: const Text('Shop'),
             onTap: () {
-              Navigator.of(context).pushReplacementNamed('/');
+              context.router.replace(const ProductOverviewRoute());
             },
           ),
           const Divider(),
@@ -30,8 +29,7 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.payment),
             title: const Text('Orders'),
             onTap: () {
-              Navigator.of(context)
-                  .pushReplacementNamed(OrdersScreen.routeName);
+              context.router.replace(const OrdersRoute());
             },
           ),
           const Divider(),
@@ -39,8 +37,7 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.edit),
             title: const Text('Manage Products'),
             onTap: () {
-              Navigator.of(context)
-                  .pushReplacementNamed(UserProductsScreen.routeName);
+              context.router.replace(const UserProductsRoute());
             },
           ),
           const Divider(),
@@ -48,8 +45,8 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.edit),
             title: const Text('Log Out'),
             onTap: () async {
-              Navigator.of(context).pop();
-              Navigator.of(context).pushReplacementNamed('/');
+              context.router.popUntilRoot();
+              context.router.replace(const SessionRoute());
 
               context.read<Auth>().logout();
             },

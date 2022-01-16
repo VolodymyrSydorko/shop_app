@@ -1,8 +1,8 @@
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/screens/edit_product_screen.dart';
+import 'package:shop_app/router/router.gr.dart';
 
-//import '../screens/edit_product_screen.dart';
 import '../providers/products.dart';
 
 class UserProductItem extends StatelessWidget {
@@ -33,8 +33,7 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
-                Navigator.of(context)
-                    .pushNamed(EditProductScreen.routeName, arguments: id);
+                context.router.push(EditProductRoute(productId: id));
               },
               color: Theme.of(context).primaryColor,
             ),

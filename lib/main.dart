@@ -8,5 +8,5 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await setupServiceLocator();
-  runApp(const ShopApp());
+  runApp(ShopApp());
 }
