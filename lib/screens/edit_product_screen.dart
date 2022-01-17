@@ -154,6 +154,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     context.router.pop();
                   },
                 ),
+                ListTile(
+                  leading: const Icon(Icons.cancel),
+                  title: const Text('Cencel'),
+                  onTap: () {
+                    context.router.pop();
+                  },
+                ),
               ],
             ),
           );

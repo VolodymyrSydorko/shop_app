@@ -6,83 +6,110 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/router/router.gr.dart';
+import 'package:shop_app/styles/colors.dart';
+import 'package:shop_app/widgets/app_bar/custom_app_bar.dart';
 import 'package:shop_app/widgets/app_form_item.dart';
+import 'package:shop_app/widgets/buttons/custom_material_button.dart';
+import 'package:shop_app/widgets/buttons/socal_card.dart';
+import 'package:shop_app/widgets/no_account_text.dart';
 
 import '../providers/auth.dart';
 
-enum AuthMode { signup, login }
+class SignInScreen extends StatelessWidget {
+  static const routeName = 'SignInRoute';
+  static const routePath = '/sign-in';
 
-class LoginScreen extends StatelessWidget {
-  static const routeName = 'LoginRoute';
-  static const routePath = '/login';
-
-  const LoginScreen({Key? key}) : super(key: key);
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final deviceSize = MediaQuery.of(context).size;
+    final customBackAppBar = CustomBackAppBar();
+    final screenHeight = deviceSize.height -
+        (customBackAppBar.preferredSize.height +
+            MediaQuery.of(context).padding.top +
+            kToolbarHeight);
 
     return Scaffold(
-      body: SingleChildScrollView(
-        child: Stack(
-          children: <Widget>[
-            Container(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    const Color.fromRGBO(215, 117, 255, 1).withOpacity(0.5),
-                    const Color.fromRGBO(255, 188, 117, 1).withOpacity(0.9),
-                  ],
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  stops: const [0, 1],
-                ),
-              ),
-            ),
-            SizedBox(
-              height: deviceSize.height,
-              width: deviceSize.width,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  Flexible(
-                    child: Container(
-                      margin: const EdgeInsets.only(bottom: 20.0),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 94.0),
-                      transform: Matrix4.rotationZ(-8 * pi / 180)
-                        ..translate(-10.0),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: Colors.deepOrange.shade900,
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 8,
-                            color: Colors.black26,
-                            offset: Offset(0, 2),
-                          )
-                        ],
-                      ),
-                      child: const Text(
-                        'MyShop',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 50,
-                          fontFamily: 'Anton',
-                          fontWeight: FontWeight.normal,
+      appBar: customBackAppBar,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: EdgeInsets.only(top: customBackAppBar.preferredSize.height),
+          child: SizedBox(
+            height: screenHeight,
+            width: deviceSize.width,
+            child: Stack(
+              alignment: Alignment.center,
+              children: <Widget>[
+                Positioned(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Container(
+                        margin: const EdgeInsets.only(bottom: 20.0),
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 8.0, horizontal: 94.0),
+                        transform: Matrix4.rotationZ(-8 * pi / 180)
+                          ..translate(-10.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: AppColors.primary,
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 8,
+                              color: Colors.black26,
+                              offset: Offset(0, 2),
+                            )
+                          ],
+                        ),
+                        child: const Text(
+                          'MyShop',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 50,
+                            fontFamily: 'Anton',
+                            fontWeight: FontWeight.normal,
+                          ),
                         ),
                       ),
+                      const AuthCard(),
+                    ],
+                  ),
+                ),
+                Positioned(
+                  bottom: 20.0,
+                  child: Align(
+                    alignment: FractionalOffset.bottomCenter,
+                    child: Column(
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SocalCard(
+                              'assets/icons/google-icon.svg',
+                              onTap: () {},
+                            ),
+                            SocalCard(
+                              'assets/icons/facebook-icon.svg',
+                              onTap: () {},
+                            ),
+                            SocalCard(
+                              'assets/icons/twitter-icon.svg',
+                              onTap: () {},
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 40),
+                        const NoAccountText(),
+                      ],
                     ),
                   ),
-                  Flexible(
-                    flex: deviceSize.width > 600 ? 2 : 1,
-                    child: const AuthCard(),
-                  ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
@@ -99,7 +126,6 @@ class AuthCard extends StatefulWidget {
 }
 
 class _AuthCardState extends State<AuthCard> {
-  AuthMode _authMode = AuthMode.login;
   final _scrollController = ScrollController();
   final _loginFormRef = GlobalKey<FormState>();
 
@@ -123,7 +149,7 @@ class _AuthCardState extends State<AuthCard> {
           TextButton(
             child: const Text('Ok'),
             onPressed: () {
-              Navigator.of(ctx).pop();
+              context.router.pop();
             },
           )
         ],
@@ -173,33 +199,16 @@ class _AuthCardState extends State<AuthCard> {
       _loginFormRef.currentState?.save();
 
       try {
-        if (_authMode == AuthMode.login) {
-          await context
-              .read<Auth>()
-              .login(_authData['email']!, _authData['password']!);
-        } else {
-          await context
-              .read<Auth>()
-              .signUp(_authData['email']!, _authData['password']!);
-        }
+        await context
+            .read<Auth>()
+            .login(_authData['email']!, _authData['password']!);
       } catch (e) {
         _showErrorDialog(e.toString());
       }
     }
 
+    context.router.popUntilRoot();
     context.router.replace(const ProductOverviewRoute());
-  }
-
-  void _switchAuthMode() {
-    if (_authMode == AuthMode.login) {
-      setState(() {
-        _authMode = AuthMode.signup;
-      });
-    } else {
-      setState(() {
-        _authMode = AuthMode.login;
-      });
-    }
   }
 
   @override
@@ -215,7 +224,7 @@ class _AuthCardState extends State<AuthCard> {
         ),
         elevation: 8.0,
         child: Container(
-          height: 320,
+          height: 280,
           width: deviceSize.width * 0.75,
           padding: const EdgeInsets.all(16.0),
           child: Form(
@@ -280,10 +289,8 @@ class _AuthCardState extends State<AuthCard> {
                   width: double.infinity,
                   height: 36,
                   margin: const EdgeInsets.only(bottom: 10),
-                  child: MaterialButton(
-                    color: Colors.red,
-                    disabledColor: const Color.fromRGBO(29, 129, 207, 1),
-                    padding: EdgeInsets.zero,
+                  child: CustomMaterialButton(
+                    height: 36,
                     child: isLoading
                         ? const SizedBox(
                             height: 20,
@@ -295,17 +302,12 @@ class _AuthCardState extends State<AuthCard> {
                             ),
                           )
                         : const Text(
-                            'Login',
+                            'Sign in',
                             style: TextStyle(
                                 fontSize: 14, fontWeight: FontWeight.w500),
                           ),
                     onPressed: isLoading ? null : _login,
                   ),
-                ),
-                TextButton(
-                  child: Text(
-                      '${_authMode == AuthMode.login ? 'SIGNUP' : 'LOGIN'} INSTEAD'),
-                  onPressed: _switchAuthMode,
                 ),
               ],
             ),

@@ -11,12 +11,14 @@ class ProductsRepository {
   ProductsRepository({required ApiClient apiClient}) : _apiClient = apiClient;
 
   Future<List<Product>> getAllProducts({String? userId}) async {
-    final filterString =
-        userId != null ? 'orderBy="creatorId"&equalTo="$userId"' : '';
+    final Map<String, dynamic> queryParameters = userId != null
+        ? {'orderBy': '"creatorId"', 'equalTo': '"$userId"'}
+        : {};
 
     try {
       final response = (await _apiClient.dio.get<Map<String, dynamic>?>(
-              '${Endpoints.products}.json?$filterString'))
+              '${Endpoints.products}.json',
+              queryParameters: queryParameters))
           .data;
 
       if (response == null) {

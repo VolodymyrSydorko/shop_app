@@ -15,8 +15,8 @@ class SessionScreen extends StatefulWidget {
 }
 
 class _SessionScreenState extends State<SessionScreen> {
-  goToLoginScreen() {
-    context.router.replace(const LoginRoute());
+  goToWelcomeScreen() {
+    context.router.replace(const WelcomeRoute());
   }
 
   tryAutoLogin() async {
@@ -26,10 +26,10 @@ class _SessionScreenState extends State<SessionScreen> {
       if (isLoggedIn) {
         context.router.replace(const ProductOverviewRoute());
       } else {
-        goToLoginScreen();
+        goToWelcomeScreen();
       }
     } catch (e) {
-      goToLoginScreen();
+      goToWelcomeScreen();
     }
   }
 

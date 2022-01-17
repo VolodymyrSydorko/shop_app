@@ -3,7 +3,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shop_app/styles/colors.dart';
 
 class AppFormItem extends FormField<String> {
-  // final Widget? prefix;
   final TextEditingController? controller;
   final String? label;
   final IconData? labelIcon;

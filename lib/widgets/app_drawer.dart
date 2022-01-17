@@ -46,7 +46,7 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Log Out'),
             onTap: () async {
               context.router.popUntilRoot();
-              context.router.replace(const SessionRoute());
+              context.router.replace(const WelcomeRoute());
 
               context.read<Auth>().logout();
             },

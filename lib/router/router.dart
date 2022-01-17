@@ -1,15 +1,16 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:shop_app/router/auth_guard.dart';
-import 'package:shop_app/router/products_guard.dart';
+import 'package:shop_app/router/guards/guards.dart';
 import 'package:shop_app/screens/cart_screen.dart';
 import 'package:shop_app/screens/edit_product_screen.dart';
-import 'package:shop_app/screens/login_screen.dart';
+import 'package:shop_app/screens/sign_in_screen.dart';
 import 'package:shop_app/screens/not_found_screen.dart';
 import 'package:shop_app/screens/orders_screen.dart';
 import 'package:shop_app/screens/product_detail_screen.dart';
 import 'package:shop_app/screens/products_overview_screen.dart';
 import 'package:shop_app/screens/session_screen.dart';
+import 'package:shop_app/screens/sign_up_screen.dart';
 import 'package:shop_app/screens/user_products_screen.dart';
+import 'package:shop_app/screens/welcome/welcome_screen.dart';
 
 @MaterialAutoRouter(
   replaceInRouteName: 'Page|Screen,Route',
@@ -21,9 +22,19 @@ import 'package:shop_app/screens/user_products_screen.dart';
       initial: true,
     ),
     AutoRoute(
-      path: LoginScreen.routePath,
-      name: LoginScreen.routeName,
-      page: LoginScreen,
+      path: WelcomeScreen.routePath,
+      name: WelcomeScreen.routeName,
+      page: WelcomeScreen,
+    ),
+    AutoRoute(
+      path: SignInScreen.routePath,
+      name: SignInScreen.routeName,
+      page: SignInScreen,
+    ),
+    AutoRoute(
+      path: SignUpScreen.routePath,
+      name: SignUpScreen.routeName,
+      page: SignUpScreen,
     ),
     AutoRoute(
       path: ProductsOverviewScreen.routePath,
@@ -67,7 +78,10 @@ import 'package:shop_app/screens/user_products_screen.dart';
       name: NotFoundScreen.routeName,
       page: NotFoundScreen,
     ),
-    RedirectRoute(path: '*', redirectTo: '/'),
+    RedirectRoute(
+      path: '*',
+      redirectTo: WelcomeScreen.routePath,
+    ),
   ],
 )
 class $AppRouter {}

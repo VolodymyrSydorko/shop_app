@@ -1,8 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shop_app/providers/providers.dart';
-import 'package:shop_app/router/auth_guard.dart';
-import 'package:shop_app/router/products_guard.dart';
+import 'package:shop_app/router/guards/guards.dart';
 import 'package:shop_app/router/router.gr.dart';
 
 import '../services.dart';

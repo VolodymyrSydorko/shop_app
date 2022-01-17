@@ -25,6 +25,7 @@ dependencies:
   get_it: ^7.2.0
   
   cupertino_icons: ^1.0.4
+  flutter_svg: ^1.0.1
   provider: ^6.0.2
   intl: ^0.17.0
   shared_preferences: ^2.0.12
@@ -53,9 +54,11 @@ dev_dependencies:
   flutter_lints: ^1.0.4
 
 flutter:
-  assets:
-    - assets/
   uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/icons/
 
   fonts:
     - family: Lato

@@ -120,7 +120,7 @@ class Auth with ChangeNotifier {
           TextButton(
             onPressed: () {
               context.router.popUntilRoot();
-              context.router.replace(const LoginRoute());
+              context.router.replace(const SignInRoute());
 
               logout();
             },
