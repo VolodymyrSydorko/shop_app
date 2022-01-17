@@ -18,9 +18,7 @@ class ShopApp extends StatelessWidget {
           value: getIt.get<Auth>(),
         ),
         ChangeNotifierProxyProvider<Auth, Products>(
-          create: (_) => Products(
-            productsRepository: getIt.get<ProductsRepository>(),
-          ),
+          create: (_) => getIt.get<Products>(),
           update: (_, auth, products) {
             return products!..profile = auth.profile;
           },

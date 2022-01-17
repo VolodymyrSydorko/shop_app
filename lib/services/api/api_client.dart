@@ -1,4 +1,6 @@
 import 'package:dio/dio.dart';
+import 'package:shop_app/providers/auth.dart';
+import 'package:shop_app/services/services.dart';
 
 import 'endpoints.dart';
 
@@ -21,4 +23,10 @@ class ApiClient {
   }
 }
 
-class ApiInterceptor extends Interceptor {}
+class ApiInterceptor extends Interceptor {
+  @override
+  void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
+    options.queryParameters['auth'] = getIt.get<Auth>().profile?.token;
+    return super.onRequest(options, handler);
+  }
+}
