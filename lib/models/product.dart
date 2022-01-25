@@ -3,6 +3,8 @@ import 'package:json_annotation/json_annotation.dart';
 
 part 'product.g.dart';
 
+enum Category { none, sport, transfort, clothes, home, garden, work, business }
+
 @CopyWith()
 @JsonSerializable()
 class Product {
@@ -11,6 +13,7 @@ class Product {
   final String title;
   final String description;
   final double price;
+  final Category category;
   final String imagePath;
   final String? base64Url;
   bool isFavorite;
@@ -20,6 +23,7 @@ class Product {
     required this.title,
     required this.description,
     required this.price,
+    required this.category,
     required this.imagePath,
     this.base64Url,
     this.isFavorite = false,

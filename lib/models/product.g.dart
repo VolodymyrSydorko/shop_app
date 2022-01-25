@@ -9,6 +9,8 @@ part of 'product.dart';
 abstract class _$ProductCWProxy {
   Product base64Url(String? base64Url);
 
+  Product category(Category category);
+
   Product description(String description);
 
   Product id(String id);
@@ -29,6 +31,7 @@ abstract class _$ProductCWProxy {
   /// ````
   Product call({
     String? base64Url,
+    Category? category,
     String? description,
     String? id,
     String? imagePath,
@@ -46,6 +49,9 @@ class _$ProductCWProxyImpl implements _$ProductCWProxy {
 
   @override
   Product base64Url(String? base64Url) => this(base64Url: base64Url);
+
+  @override
+  Product category(Category category) => this(category: category);
 
   @override
   Product description(String description) => this(description: description);
@@ -75,6 +81,7 @@ class _$ProductCWProxyImpl implements _$ProductCWProxy {
   /// ````
   Product call({
     Object? base64Url = const $CopyWithPlaceholder(),
+    Object? category = const $CopyWithPlaceholder(),
     Object? description = const $CopyWithPlaceholder(),
     Object? id = const $CopyWithPlaceholder(),
     Object? imagePath = const $CopyWithPlaceholder(),
@@ -87,6 +94,10 @@ class _$ProductCWProxyImpl implements _$ProductCWProxy {
           ? _value.base64Url
           // ignore: cast_nullable_to_non_nullable
           : base64Url as String?,
+      category: category == const $CopyWithPlaceholder()
+          ? _value.category
+          // ignore: cast_nullable_to_non_nullable
+          : category as Category,
       description: description == const $CopyWithPlaceholder()
           ? _value.description
           // ignore: cast_nullable_to_non_nullable
@@ -128,6 +139,7 @@ Product _$ProductFromJson(Map<String, dynamic> json) => Product(
       title: json['title'] as String,
       description: json['description'] as String,
       price: (json['price'] as num).toDouble(),
+      category: $enumDecode(_$CategoryEnumMap, json['category']),
       imagePath: json['imagePath'] as String,
       base64Url: json['base64Url'] as String?,
       isFavorite: json['isFavorite'] as bool? ?? false,
@@ -137,7 +149,19 @@ Map<String, dynamic> _$ProductToJson(Product instance) => <String, dynamic>{
       'title': instance.title,
       'description': instance.description,
       'price': instance.price,
+      'category': _$CategoryEnumMap[instance.category],
       'imagePath': instance.imagePath,
       'base64Url': instance.base64Url,
       'isFavorite': instance.isFavorite,
     };
+
+const _$CategoryEnumMap = {
+  Category.none: 'none',
+  Category.sport: 'sport',
+  Category.transfort: 'transfort',
+  Category.clothes: 'clothes',
+  Category.home: 'home',
+  Category.garden: 'garden',
+  Category.work: 'work',
+  Category.business: 'business',
+};

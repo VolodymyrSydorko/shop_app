@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/models/product.dart';
 
 import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/products.dart';
@@ -8,21 +9,18 @@ import 'package:shop_app/router/router.gr.dart';
 import 'package:shop_app/widgets/product_item.dart';
 
 class ProductsGrid extends StatelessWidget {
-  const ProductsGrid(
-    this.showOnlyFavorites, {
+  const ProductsGrid({
+    required this.products,
     Key? key,
   }) : super(key: key);
 
-  final bool showOnlyFavorites;
+  final List<Product> products;
 
   @override
   Widget build(BuildContext context) {
     final cart = context.read<Cart>();
 
     final productContainer = context.watch<Products>();
-    final products = showOnlyFavorites
-        ? productContainer.favoriteProducts
-        : productContainer.products;
 
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),

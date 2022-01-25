@@ -33,19 +33,22 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         child: GestureDetector(
           onTap: onTap,
-          child: base64Url == null
-              ? Image.network(
-                  imagePath,
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.camera_alt_outlined),
-                )
-              : Image.memory(
-                  base64Decode(base64Url!),
-                  fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) =>
-                      const Icon(Icons.camera_alt_outlined),
-                ),
+          child: Hero(
+            tag: id,
+            child: base64Url == null
+                ? Image.network(
+                    imagePath,
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.camera_alt_outlined),
+                  )
+                : Image.memory(
+                    base64Decode(base64Url!),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) =>
+                        const Icon(Icons.camera_alt_outlined),
+                  ),
+          ),
         ),
         footer: GridTileBar(
           backgroundColor: Colors.black38,

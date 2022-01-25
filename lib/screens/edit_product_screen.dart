@@ -28,6 +28,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     id: '',
     title: 'test product',
     price: 1,
+    category: Category.none,
     description: 'description',
     imagePath:
         'https://upload.wikimedia.org/wikipedia/commons/thumb/1/14/Cast-Iron-Pan.jpg/1024px-Cast-Iron-Pan.jpg',
@@ -265,6 +266,23 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 },
                 onSaved: (value) {
                   _editedProduct = _editedProduct.copyWith.description(value!);
+                },
+              ),
+              DropdownButton(
+                isExpanded: true,
+                value: _editedProduct.category,
+                icon: const Icon(Icons.keyboard_arrow_down),
+                items: Category.values.map((Category item) {
+                  return DropdownMenuItem(
+                    value: item,
+                    child: Text(item.name),
+                  );
+                }).toList(),
+                onChanged: (Category? newValue) {
+                  setState(() {
+                    _editedProduct =
+                        _editedProduct.copyWith.category(newValue!);
+                  });
                 },
               ),
               Row(

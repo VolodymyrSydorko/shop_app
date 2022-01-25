@@ -1,9 +1,11 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/models/product.dart';
 import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/products.dart';
 import 'package:shop_app/router/router.gr.dart';
+import 'package:shop_app/screens/search/search_screen.dart';
 import 'package:shop_app/widgets/app_drawer.dart';
 import 'package:shop_app/widgets/badge.dart';
 import 'package:shop_app/widgets/products_grid.dart';
@@ -21,8 +23,6 @@ class ProductsOverviewScreen extends StatefulWidget {
 }
 
 class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
-  bool _showOnlyFavorites = false;
-
   @override
   void initState() {
     super.initState();
@@ -34,31 +34,14 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
       appBar: AppBar(
         title: const Text('My Shop'),
         actions: [
-          PopupMenuButton(
-            onSelected: (FilterOptions selectedOption) {
-              if (selectedOption == FilterOptions.favorites &&
-                  !_showOnlyFavorites) {
-                setState(() {
-                  _showOnlyFavorites = true;
-                });
-              } else if (selectedOption == FilterOptions.all &&
-                  _showOnlyFavorites) {
-                setState(() {
-                  _showOnlyFavorites = false;
-                });
-              }
+          IconButton(
+            onPressed: () async {
+              await showSearch(
+                context: context,
+                delegate: SearchScreen(),
+              );
             },
-            icon: const Icon(Icons.more_vert),
-            itemBuilder: (context) => const [
-              PopupMenuItem(
-                child: Text('Only Favorites'),
-                value: FilterOptions.favorites,
-              ),
-              PopupMenuItem(
-                child: Text('Show All'),
-                value: FilterOptions.all,
-              ),
-            ],
+            icon: const Icon(Icons.search),
           ),
           Consumer<Cart>(
             builder: (context, cart, child) => Badge(
@@ -78,7 +61,9 @@ class _ProductsOverviewScreenState extends State<ProductsOverviewScreen> {
         builder: (context, snapshot) =>
             snapshot.connectionState == ConnectionState.waiting
                 ? const Center(child: CircularProgressIndicator())
-                : ProductsGrid(_showOnlyFavorites),
+                : ProductsGrid(
+                    products: snapshot.data as List<Product>,
+                  ),
       ),
     );
   }

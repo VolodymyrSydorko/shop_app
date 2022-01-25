@@ -15,6 +15,9 @@ class Products with ChangeNotifier {
   List<Product> _products = [];
   List<Product> get products => [..._products];
 
+  Set<String> _recentSearches = {};
+  Set<String> get recentSearches => {..._recentSearches};
+
   List<Product> get favoriteProducts =>
       _products.where((product) => product.isFavorite).toList();
 
@@ -87,6 +90,39 @@ class Products with ChangeNotifier {
     _products.removeWhere((element) => element.id == id);
 
     setBusy(false);
+  }
+
+  Future<List<Product>> searchProduct(String query, Category category) async {
+    if (query.isEmpty) {
+      return [];
+    }
+
+    _recentSearches.add(query);
+
+    await Future.delayed(const Duration(seconds: 2));
+
+    return _products
+        .where((p) =>
+            p.title.contains(query) &&
+            (category == Category.none || p.category == category))
+        .toList();
+  }
+
+  void addRecentSearches(String query) {
+    _recentSearches.add(query);
+    notifyListeners();
+  }
+
+  void deleteRecentSearches(String query) {
+    if (_recentSearches.contains(query)) {
+      _recentSearches.remove(query);
+    }
+    notifyListeners();
+  }
+
+  void clearRecentSearches() {
+    _recentSearches.clear();
+    notifyListeners();
   }
 
   void setBusy(bool isBusy) {

@@ -42,6 +42,11 @@ import 'package:shop_app/screens/welcome/welcome_screen.dart';
       page: ProductsOverviewScreen,
       guards: [AuthGuard],
     ),
+    // AutoRoute(
+    //   path: SearchScreen.routePath,
+    //   name: SearchScreen.routeName,
+    //   page: SearchScreen,
+    // ),
     AutoRoute(
       path:
           '${ProductsOverviewScreen.routePath}/${ProductDetailScreen.routePath}',
