@@ -1,10 +1,10 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/blocs/cart/cart_bloc.dart';
+import 'package:shop_app/blocs/products/products_bloc.dart';
 import 'package:shop_app/models/product.dart';
 
-import 'package:shop_app/providers/cart.dart';
-import 'package:shop_app/providers/products.dart';
 import 'package:shop_app/router/router.gr.dart';
 import 'package:shop_app/widgets/product_item.dart';
 
@@ -18,9 +18,9 @@ class ProductsGrid extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cart = context.read<Cart>();
+    final cart = context.read<CartBloc>();
 
-    final productContainer = context.watch<Products>();
+    final productsBloc = context.read<ProductsBloc>();
 
     return GridView.builder(
       padding: const EdgeInsets.all(10.0),
@@ -44,13 +44,14 @@ class ProductsGrid extends StatelessWidget {
             context.router.push(ProductDetailRoute(productId: product.id));
           },
           onCartPressed: () {
-            cart.addItem(product.id, product.title, product.price);
+            cart.add(
+                CartEvent.addItem(product.id, product.title, product.price));
           },
           toggleFavorite: () {
-            productContainer.toggleFavoriteStatus(product);
+            productsBloc.add(ProductsEvent.toggleFavorite(product));
           },
           cancelPressed: () {
-            cart.removeSingleItem(product.id);
+            cart.add(CartEvent.removeSingleItem(product.id));
           },
         );
       },

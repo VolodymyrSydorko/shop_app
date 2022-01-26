@@ -1,5 +1,7 @@
+import 'package:auto_route/src/router/auto_router_x.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/blocs/cart/cart_bloc.dart';
 import 'package:shop_app/providers/cart.dart';
 
 class CartItem extends StatelessWidget {
@@ -20,7 +22,7 @@ class CartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cart = context.read<Cart>();
+    final cart = context.read<CartBloc>();
 
     return Dismissible(
       key: ValueKey(id),
@@ -40,7 +42,7 @@ class CartItem extends StatelessWidget {
       ),
       direction: DismissDirection.endToStart,
       onDismissed: (direction) {
-        cart.removeItem(productId);
+        cart.add(CartEvent.removeItem(productId));
       },
       confirmDismiss: (direction) {
         return showDialog(
@@ -62,13 +64,13 @@ class CartItem extends StatelessWidget {
                     children: [
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(false);
+                          context.router.pop(false);
                         },
                         child: const Text('No'),
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(true);
+                          context.router.pop(true);
                         },
                         child: const Text('Yes'),
                       ),

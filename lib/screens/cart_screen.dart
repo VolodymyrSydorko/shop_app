@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shop_app/providers/cart.dart' show Cart;
-import 'package:shop_app/providers/orders.dart';
-import 'package:shop_app/widgets/cart_item.dart';
+import 'package:shop_app/blocs/cart/cart_bloc.dart';
+import 'package:shop_app/blocs/orders/orders_bloc.dart';
+import 'package:shop_app/widgets/cart_item.dart' as cw;
 
 class CartScreen extends StatelessWidget {
   static const routeName = 'CartRoute';
@@ -12,8 +12,8 @@ class CartScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cart = context.watch<Cart>();
-    final orders = context.read<Orders>();
+    final cart = context.watch<CartBloc>();
+    final orders = context.read<OrdersBloc>();
 
     return Scaffold(
       appBar: AppBar(
@@ -32,16 +32,19 @@ class CartScreen extends StatelessWidget {
                   const Spacer(),
                   Center(
                     child: Chip(
-                      label: Text('\$${cart.totalAmount.toStringAsFixed(2)}'),
+                      label: Text(
+                          '\$${cart.state.totalAmount.toStringAsFixed(2)}'),
                     ),
                   ),
                   TextButton(
                     onPressed: () => {
-                      orders.addOrder(
-                        cart.items.values.toList(),
-                        cart.totalAmount,
+                      orders.add(
+                        OrdersEvent.addOrder(
+                          cart.state.items.values.toList(),
+                          cart.state.totalAmount,
+                        ),
                       ),
-                      cart.clearCart(),
+                      cart.add(const CartEvent.clear()),
                     },
                     child: const Text('ORDER NOW'),
                   )
@@ -53,17 +56,17 @@ class CartScreen extends StatelessWidget {
           Expanded(
             child: ListView.builder(
                 itemBuilder: (context, i) {
-                  final cartItem = cart.items.values.elementAt(i);
+                  final cartItem = cart.state.items.values.elementAt(i);
 
-                  return CartItem(
+                  return cw.CartItem(
                     cartItem.id,
-                    cart.items.keys.elementAt(i),
+                    cart.state.items.keys.elementAt(i),
                     cartItem.price,
                     cartItem.quantity,
                     cartItem.title,
                   );
                 },
-                itemCount: cart.items.length),
+                itemCount: cart.state.items.length),
           )
         ],
       ),

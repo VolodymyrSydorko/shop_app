@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/blocs/cart/cart_bloc.dart';
+import 'package:shop_app/blocs/orders/orders_bloc.dart';
 import 'package:shop_app/router/router.gr.dart';
 
 import 'providers/providers.dart';
@@ -12,34 +15,38 @@ class ShopApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
+    return MultiBlocProvider(
       providers: [
-        ChangeNotifierProvider.value(
-          value: getIt.get<Auth>(),
+        BlocProvider(
+          create: (context) => CartBloc(),
         ),
-        ChangeNotifierProxyProvider<Auth, Products>(
-          create: (_) => getIt.get<Products>(),
-          update: (_, auth, products) {
-            return products!..profile = auth.profile;
-          },
-        ),
-        ChangeNotifierProvider(
-          create: (_) => Cart(),
-        ),
-        ChangeNotifierProvider(
-          create: (_) => Orders(),
+        BlocProvider(
+          create: (context) => OrdersBloc(),
         ),
       ],
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        title: 'MyShop',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
-              .copyWith(secondary: Colors.deepOrange),
-          fontFamily: 'Lato',
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider.value(
+            value: getIt.get<Auth>(),
+          ),
+          ChangeNotifierProxyProvider<Auth, Products>(
+            create: (_) => getIt.get<Products>(),
+            update: (_, auth, products) {
+              return products!..profile = auth.profile;
+            },
+          ),
+        ],
+        child: MaterialApp.router(
+          debugShowCheckedModeBanner: false,
+          title: 'MyShop',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSwatch(primarySwatch: Colors.blue)
+                .copyWith(secondary: Colors.deepOrange),
+            fontFamily: 'Lato',
+          ),
+          routerDelegate: _appRouter.delegate(),
+          routeInformationParser: _appRouter.defaultRouteParser(),
         ),
-        routerDelegate: _appRouter.delegate(),
-        routeInformationParser: _appRouter.defaultRouteParser(),
       ),
     );
   }
