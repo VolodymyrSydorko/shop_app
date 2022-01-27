@@ -6,12 +6,14 @@ class AppFormItem extends FormField<String> {
   final TextEditingController? controller;
   final String? label;
   final IconData? labelIcon;
+  final String? errorText;
 
   AppFormItem({
     Key? key,
     this.controller,
     this.label,
     this.labelIcon,
+    this.errorText,
     String? initialValue,
     FocusNode? focusNode,
     TextInputType? keyboardType,
@@ -49,7 +51,7 @@ class AppFormItem extends FormField<String> {
 
             return Container(
               margin: const EdgeInsets.only(bottom: 10),
-              height: label != null && label.isNotEmpty ? 77 : 60,
+              height: label != null && label.isNotEmpty ? 80 : 60,
               child: Stack(children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +93,7 @@ class AppFormItem extends FormField<String> {
                         clearButtonMode: OverlayVisibilityMode.editing,
                         decoration: BoxDecoration(
                             border: Border.all(
-                                color: field.errorText != null
+                                color: errorText != null
                                     ? AppColors.danger
                                     : AppColors.border),
                             borderRadius: BorderRadius.circular(5)),
@@ -120,7 +122,7 @@ class AppFormItem extends FormField<String> {
                         duration: const Duration(seconds: 5),
                         opacity: 1,
                         child: Text(
-                          field.errorText ?? '',
+                          errorText ?? '',
                           style: const TextStyle(
                               color: CupertinoColors.destructiveRed,
                               fontSize: 13),

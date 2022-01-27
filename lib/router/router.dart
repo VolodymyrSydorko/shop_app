@@ -1,15 +1,17 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:shop_app/router/guards/guards.dart';
 import 'package:shop_app/screens/cart_screen.dart';
-import 'package:shop_app/screens/edit_product_screen.dart';
-import 'package:shop_app/screens/sign_in_screen.dart';
+import 'package:shop_app/screens/products_overview/products_overview_wrapper.dart';
+import 'package:shop_app/screens/user_products/edit_product_screen.dart';
+import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
 import 'package:shop_app/screens/not_found_screen.dart';
 import 'package:shop_app/screens/orders_screen.dart';
-import 'package:shop_app/screens/product_detail_screen.dart';
-import 'package:shop_app/screens/products_overview_screen.dart';
+import 'package:shop_app/screens/products_overview/product_detail_screen.dart';
+import 'package:shop_app/screens/products_overview/products_overview_screen.dart';
 import 'package:shop_app/screens/session_screen.dart';
 import 'package:shop_app/screens/sign_up_screen.dart';
-import 'package:shop_app/screens/user_products_screen.dart';
+import 'package:shop_app/screens/user_products/user_products_overview_wrapper.dart';
+import 'package:shop_app/screens/user_products/user_products_screen.dart';
 import 'package:shop_app/screens/welcome/welcome_screen.dart';
 
 @MaterialAutoRouter(
@@ -25,6 +27,7 @@ import 'package:shop_app/screens/welcome/welcome_screen.dart';
       path: WelcomeScreen.routePath,
       name: WelcomeScreen.routeName,
       page: WelcomeScreen,
+      initial: true,
     ),
     AutoRoute(
       path: SignInScreen.routePath,
@@ -37,22 +40,23 @@ import 'package:shop_app/screens/welcome/welcome_screen.dart';
       page: SignUpScreen,
     ),
     AutoRoute(
-      path: ProductsOverviewScreen.routePath,
-      name: ProductsOverviewScreen.routeName,
-      page: ProductsOverviewScreen,
-      guards: [AuthGuard],
-    ),
-    // AutoRoute(
-    //   path: SearchScreen.routePath,
-    //   name: SearchScreen.routeName,
-    //   page: SearchScreen,
-    // ),
-    AutoRoute(
-      path:
-          '${ProductsOverviewScreen.routePath}/${ProductDetailScreen.routePath}',
-      name: ProductDetailScreen.routeName,
-      page: ProductDetailScreen,
-      guards: [AuthGuard, ProductDetailGuard],
+      path: ProductsOverviewWrapper.routePath,
+      name: ProductsOverviewWrapper.routeName,
+      page: ProductsOverviewWrapper,
+      children: [
+        AutoRoute(
+          path: ProductsOverviewScreen.routePath,
+          name: ProductsOverviewScreen.routeName,
+          page: ProductsOverviewScreen,
+          guards: [AuthGuard],
+        ),
+        AutoRoute(
+          path: ProductDetailScreen.routePath,
+          name: ProductDetailScreen.routeName,
+          page: ProductDetailScreen,
+          guards: [AuthGuard, ProductDetailGuard],
+        ),
+      ],
     ),
     AutoRoute(
       path: OrdersScreen.routePath,
@@ -67,16 +71,23 @@ import 'package:shop_app/screens/welcome/welcome_screen.dart';
       guards: [AuthGuard],
     ),
     AutoRoute(
-      path: UserProductsScreen.routePath,
-      name: UserProductsScreen.routeName,
-      page: UserProductsScreen,
-      guards: [AuthGuard],
-    ),
-    AutoRoute(
-      path: '${UserProductsScreen.routePath}/${EditProductScreen.routePath}',
-      name: EditProductScreen.routeName,
-      page: EditProductScreen,
-      guards: [AuthGuard],
+      path: UserProductsWrapper.routePath,
+      name: UserProductsWrapper.routeName,
+      page: UserProductsWrapper,
+      children: [
+        AutoRoute(
+          path: UserProductsScreen.routePath,
+          name: UserProductsScreen.routeName,
+          page: UserProductsScreen,
+          guards: [AuthGuard],
+        ),
+        AutoRoute(
+          path: EditProductScreen.routePath,
+          name: EditProductScreen.routeName,
+          page: EditProductScreen,
+          guards: [AuthGuard],
+        ),
+      ],
     ),
     AutoRoute(
       path: NotFoundScreen.routePath,
@@ -85,7 +96,7 @@ import 'package:shop_app/screens/welcome/welcome_screen.dart';
     ),
     RedirectRoute(
       path: '*',
-      redirectTo: WelcomeScreen.routePath,
+      redirectTo: '/',
     ),
   ],
 )

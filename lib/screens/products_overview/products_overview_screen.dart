@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shop_app/blocs/cart/cart_bloc.dart';
 import 'package:shop_app/blocs/products/products_bloc.dart';
+import 'package:shop_app/blocs/search_product/search_product_bloc.dart';
 import 'package:shop_app/models/product.dart';
 import 'package:shop_app/providers/cart.dart';
 import 'package:shop_app/providers/products.dart';
@@ -16,22 +17,11 @@ import 'package:shop_app/widgets/products_grid.dart';
 
 enum FilterOptions { favorites, all }
 
-class ProductsOverviewScreen extends StatelessWidget
-    implements AutoRouteWrapper {
-  static const routeName = 'ProductOverviewRoute';
-  static const routePath = '/overview-products';
+class ProductsOverviewScreen extends StatelessWidget {
+  static const routeName = 'ProductsOverviewRoute';
+  static const routePath = '';
 
   const ProductsOverviewScreen({Key? key}) : super(key: key);
-
-  @override
-  Widget wrappedRoute(BuildContext context) {
-    return BlocProvider<ProductsBloc>(
-      create: (context) =>
-          ProductsBloc(productsRepository: getIt.get<ProductsRepository>())
-            ..add(const ProductsEvent.load()),
-      child: this,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {

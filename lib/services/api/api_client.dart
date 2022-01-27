@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:shop_app/blocs/authentication/authentication_bloc.dart';
 import 'package:shop_app/providers/auth.dart';
 import 'package:shop_app/services/services.dart';
 
@@ -26,7 +27,8 @@ class ApiClient {
 class ApiInterceptor extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
-    options.queryParameters['auth'] = getIt.get<Auth>().profile?.token;
+    options.queryParameters['auth'] =
+        getIt.get<AuthenticationBloc>().state.userProfile.token;
     return super.onRequest(options, handler);
   }
 }

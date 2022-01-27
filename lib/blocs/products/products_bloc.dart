@@ -46,4 +46,8 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
       ),
     );
   }
+
+  Product findById(String id) {
+    return state.products.firstWhere((element) => element.id == id);
+  }
 }

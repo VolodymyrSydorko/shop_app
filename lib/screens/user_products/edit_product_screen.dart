@@ -2,11 +2,13 @@ import 'dart:convert';
 
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/blocs/user_products/user_products_bloc.dart';
 
-import '../models/product.dart';
-import '../providers/products.dart';
+import '../../models/product.dart';
+import '../../providers/products.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = 'EditProductRoute';
@@ -56,7 +58,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
   void didChangeDependencies() {
     if (_isInit) {
       if (widget.productId != null) {
-        _editedProduct = context.read<Products>().findById(widget.productId!);
+        _editedProduct =
+            context.read<UserProductsBloc>().findById(widget.productId!);
         _imageUrlController.text = _editedProduct.imagePath;
       }
     }
@@ -88,18 +91,20 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() async {
+  void _saveForm() {
     final isValid = _form.currentState!.validate();
     if (!isValid) {
       return;
     }
     _form.currentState!.save();
+
     if (_editedProduct.id.isNotEmpty) {
-      await context
-          .read<Products>()
-          .updateProduct(_editedProduct.id, _editedProduct);
+      context.read<UserProductsBloc>().add(
+          UserProductsEvent.editProduct(_editedProduct.id, _editedProduct));
     } else {
-      await context.read<Products>().addProduct(_editedProduct);
+      context
+          .read<UserProductsBloc>()
+          .add(UserProductsEvent.addProduct(_editedProduct));
     }
 
     context.router.pop();
@@ -157,7 +162,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
                 ),
                 ListTile(
                   leading: const Icon(Icons.cancel),
-                  title: const Text('Cencel'),
+                  title: const Text('Cancel'),
                   onTap: () {
                     context.router.pop();
                   },
@@ -180,23 +185,13 @@ class _EditProductScreenState extends State<EditProductScreen> {
             onPressed: _showPicker,
             child: const Icon(Icons.upload),
           ),
-          Consumer<Products>(
-            builder: (context, products, child) {
+          BlocBuilder<UserProductsBloc, UserProductsState>(
+            builder: (context, state) {
               return MaterialButton(
                 minWidth: 40,
                 textColor: Colors.white,
                 onPressed: _saveForm,
-                child: products.isLoading
-                    ? const SizedBox(
-                        height: 20,
-                        width: 20,
-                        child: CircularProgressIndicator(
-                          valueColor:
-                              AlwaysStoppedAnimation<Color>(Colors.white),
-                          strokeWidth: 2,
-                        ),
-                      )
-                    : const Icon(Icons.save),
+                child: const Icon(Icons.save),
               );
             },
           ),

@@ -204,7 +204,7 @@ class _AuthCardState extends State<AuthCard> {
       }
     }
 
-    context.router.replace(const ProductOverviewRoute());
+    context.router.replace(const ProductsTab());
   }
 
   @override

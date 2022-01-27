@@ -7,7 +7,7 @@ import 'package:shop_app/widgets/buttons/custom_text_button.dart';
 
 class WelcomeScreen extends StatefulWidget {
   static const routeName = 'WelcomeRoute';
-  static const routePath = '/';
+  static const routePath = '/welcome';
 
   const WelcomeScreen({Key? key}) : super(key: key);
 
@@ -83,7 +83,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                       CustomTextButton(
                         'Start',
                         onPressed: () {
-                          context.router.push(const SignInRoute());
+                          context.router.replace(const SignInRoute());
                         },
                       ),
                     ],

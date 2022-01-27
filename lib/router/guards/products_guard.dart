@@ -1,11 +1,11 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:shop_app/providers/products.dart';
+import 'package:shop_app/blocs/products/products_bloc.dart';
 import 'package:shop_app/router/router.gr.dart';
 
 class ProductDetailGuard extends AutoRouteGuard {
-  final Products productsProvider;
+  final ProductsBloc productsBloc;
 
-  ProductDetailGuard(this.productsProvider);
+  ProductDetailGuard(this.productsBloc);
 
   @override
   void onNavigation(NavigationResolver resolver, StackRouter router) {
@@ -20,7 +20,7 @@ class ProductDetailGuard extends AutoRouteGuard {
 
   bool checkIfProductExists(String productId) {
     try {
-      productsProvider.findById(productId);
+      productsBloc.findById(productId);
       return true;
     } catch (e) {
       return false;

@@ -81,7 +81,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
   FutureOr<void> _clearCart(ClearCart event, Emitter<CartState> emit) {
     emit(
-      state.copyWith(items: {}),
+      state.copyWith(items: {}, totalAmount: 0),
     );
   }
 

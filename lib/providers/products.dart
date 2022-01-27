@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shop_app/models/product.dart';
-import 'package:shop_app/models/user_profile.dart';
+import 'package:shop_app/models/auth/user_profile.dart';
 import 'package:shop_app/services/api/products_repository.dart';
 
 class Products with ChangeNotifier {

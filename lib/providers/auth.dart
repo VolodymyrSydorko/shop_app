@@ -4,7 +4,7 @@ import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shop_app/models/user_profile.dart';
+import 'package:shop_app/models/auth/user_profile.dart';
 import 'package:shop_app/router/router.gr.dart';
 import 'package:shop_app/services/services.dart';
 

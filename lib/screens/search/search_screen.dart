@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shop_app/blocs/search_product/search_product_bloc.dart';
 import 'package:shop_app/models/product.dart';
-import 'package:shop_app/providers/providers.dart';
 import 'package:shop_app/widgets/products_grid.dart';
 
 class SearchScreen extends SearchDelegate {
@@ -86,33 +86,42 @@ class SearchScreen extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     if (query.isNotEmpty) {
-      return FutureBuilder(
-        future: context.read<Products>().searchProduct(query, searchType),
-        builder: (context, AsyncSnapshot<List<Product>> shapshot) {
-          return shapshot.connectionState == ConnectionState.waiting
-              ? Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.all(12.0),
-                      child: Center(
-                        child: Text(
-                          'Searching for products..',
-                          style: Theme.of(context).textTheme.headline5,
-                        ),
+      context
+          .read<SearchProductBloc>()
+          .add(SearchProductEvent.search(query, searchType));
+
+      return BlocBuilder<SearchProductBloc, SearchProductState>(
+        builder: (context, state) {
+          switch (state.status) {
+            case SearchProductStatus.initial:
+            case SearchProductStatus.success:
+              return Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: state.products.isNotEmpty
+                    ? ProductsGrid(products: state.products)
+                    : const Center(child: Text('No elements')),
+              );
+            case SearchProductStatus.searching:
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Center(
+                      child: Text(
+                        'Searching for products..',
+                        style: Theme.of(context).textTheme.headline5,
                       ),
                     ),
-                    const Center(
-                      child: CircularProgressIndicator(),
-                    ),
-                  ],
-                )
-              : Padding(
-                  padding: const EdgeInsets.all(12.0),
-                  child: shapshot.data != null && shapshot.data!.isNotEmpty
-                      ? ProductsGrid(products: shapshot.data ?? [])
-                      : const Center(child: Text('No elements')),
-                );
+                  ),
+                  const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              );
+            case SearchProductStatus.failure:
+              return const Center(child: Text('An error occurred!'));
+          }
         },
       );
     } else {
@@ -122,9 +131,9 @@ class SearchScreen extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final products = context.read<Products>();
+    final searchBloc = context.read<SearchProductBloc>();
 
-    if (products.recentSearches.isNotEmpty && query.isEmpty) {
+    if (searchBloc.state.recentSearches.isNotEmpty && query.isEmpty) {
       return Padding(
         padding: const EdgeInsets.all(12.0),
         child: Container(
@@ -146,7 +155,8 @@ class SearchScreen extends SearchDelegate {
                   ),
                   InkWell(
                     onTap: () async {
-                      products.clearRecentSearches();
+                      searchBloc
+                          .add(const SearchProductEvent.clearRecentSearches());
                     },
                     child: Container(
                       padding: const EdgeInsets.all(5.0),
@@ -173,16 +183,17 @@ class SearchScreen extends SearchDelegate {
                   },
                   itemBuilder: (context, index) => ListTile(
                     onTap: () {
-                      query = products.recentSearches.elementAt(index);
+                      query = searchBloc.state.recentSearches.elementAt(index);
                       showResults(context);
                     },
                     title: RichText(
                       text: TextSpan(
-                          text: products.recentSearches.elementAt(index),
+                          text:
+                              searchBloc.state.recentSearches.elementAt(index),
                           style: Theme.of(context).textTheme.bodyText2),
                     ),
                   ),
-                  itemCount: products.recentSearches.length,
+                  itemCount: searchBloc.state.recentSearches.length,
                 ),
               ),
             ],

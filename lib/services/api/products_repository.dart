@@ -87,4 +87,14 @@ class ProductsRepository {
       }
     }
   }
+
+  Future<List<Product>> searchProduct(String query, Category category) async {
+    final products = await getAllProducts();
+
+    return products
+        .where((p) =>
+            p.title.contains(query) &&
+            (category == Category.none || p.category == category))
+        .toList();
+  }
 }

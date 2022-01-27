@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/blocs/authentication/authentication_bloc.dart';
 import 'package:shop_app/providers/auth.dart';
 import 'package:shop_app/router/router.gr.dart';
 
@@ -21,7 +22,7 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.shop),
             title: const Text('Shop'),
             onTap: () {
-              context.router.replace(const ProductOverviewRoute());
+              context.router.replace(const ProductsTab());
             },
           ),
           const Divider(),
@@ -37,7 +38,7 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.edit),
             title: const Text('Manage Products'),
             onTap: () {
-              context.router.replace(const UserProductsRoute());
+              context.router.replace(UserProductsTab());
             },
           ),
           const Divider(),
@@ -46,9 +47,11 @@ class AppDrawer extends StatelessWidget {
             title: const Text('Log Out'),
             onTap: () async {
               context.router.popUntilRoot();
-              context.router.replace(const WelcomeRoute());
+              context.router.replace(const SessionRoute());
 
-              context.read<Auth>().logout();
+              context
+                  .read<AuthenticationBloc>()
+                  .add(const AuthenticationEvent.logout());
             },
           ),
         ],

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shop_app/blocs/user_products/user_products_bloc.dart';
 import 'package:shop_app/router/router.gr.dart';
 
 import '../providers/products.dart';
@@ -23,7 +24,8 @@ class UserProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final products = context.read<Products>();
+    final productsBloc = context.read<UserProductsBloc>();
+
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(
@@ -45,7 +47,7 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.delete),
               onPressed: () {
-                products.deleteProduct(id);
+                productsBloc.add(UserProductsEvent.deleteProduct(id));
               },
               color: Theme.of(context).errorColor,
             ),

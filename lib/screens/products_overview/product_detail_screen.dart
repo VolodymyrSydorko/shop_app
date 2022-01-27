@@ -3,8 +3,7 @@ import 'dart:convert';
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../providers/products.dart';
+import 'package:shop_app/blocs/products/products_bloc.dart';
 
 class ProductDetailScreen extends StatelessWidget {
   static const routeName = 'ProductDetailRoute';
@@ -19,7 +18,7 @@ class ProductDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final loadedProduct = context.read<Products>().findById(productId);
+    final loadedProduct = context.read<ProductsBloc>().findById(productId);
 
     return Scaffold(
       appBar: AppBar(
