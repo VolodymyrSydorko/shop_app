@@ -4,11 +4,9 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:provider/provider.dart';
 import 'package:shop_app/blocs/user_products/user_products_bloc.dart';
 
 import '../../models/product.dart';
-import '../../providers/products.dart';
 
 class EditProductScreen extends StatefulWidget {
   static const routeName = 'EditProductRoute';

@@ -39,6 +39,12 @@ class ProductsRepository {
     }
   }
 
+  Future<List<Product>> getFavorites() async {
+    final allProducts = await getAllProducts();
+
+    return allProducts.where((p) => p.isFavorite).toList();
+  }
+
   Future<Product> addProduct(Product product, String userId) async {
     try {
       final response = (await _apiClient.dio.post<Map<String, dynamic>>(

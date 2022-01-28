@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:shop_app/blocs/authentication/authentication_bloc.dart';
-import 'package:shop_app/providers/auth.dart';
 import 'package:shop_app/services/services.dart';
 
 import 'endpoints.dart';

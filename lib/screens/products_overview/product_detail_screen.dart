@@ -30,22 +30,19 @@ class ProductDetailScreen extends StatelessWidget {
             SizedBox(
               height: 300,
               width: double.infinity,
-              child: Hero(
-                tag: productId,
-                child: loadedProduct.base64Url == null
-                    ? Image.network(
-                        loadedProduct.imagePath,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.camera_alt_outlined),
-                      )
-                    : Image.memory(
-                        base64Decode(loadedProduct.base64Url!),
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) =>
-                            const Icon(Icons.camera_alt_outlined),
-                      ),
-              ),
+              child: loadedProduct.base64Url == null
+                  ? Image.network(
+                      loadedProduct.imagePath,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.camera_alt_outlined),
+                    )
+                  : Image.memory(
+                      base64Decode(loadedProduct.base64Url!),
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) =>
+                          const Icon(Icons.camera_alt_outlined),
+                    ),
             ),
             const SizedBox(height: 10),
             Text(

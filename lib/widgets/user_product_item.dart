@@ -6,8 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/blocs/user_products/user_products_bloc.dart';
 import 'package:shop_app/router/router.gr.dart';
 
-import '../providers/products.dart';
-
 class UserProductItem extends StatelessWidget {
   final String id;
   final String title;

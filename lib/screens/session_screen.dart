@@ -18,7 +18,7 @@ class SessionScreen extends StatelessWidget {
         builder: (context, state) {
           switch (state.authStatus) {
             case AuthStatus.authenticated:
-              context.router.replace(const ProductsTab());
+              context.router.replace(const HomeRoute());
               break;
             case AuthStatus.unauthenticated:
             case AuthStatus.tokenExpired:

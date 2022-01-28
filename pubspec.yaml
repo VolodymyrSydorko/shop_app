@@ -28,6 +28,8 @@ dependencies:
   shared_preferences: ^2.0.12
   email_validator: ^2.0.1
 
+  salomon_bottom_bar: ^3.1.0
+
   #auth
   firebase_core: ^1.11.0
   firebase_auth: ^3.3.5

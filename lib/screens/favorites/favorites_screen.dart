@@ -2,36 +2,27 @@ import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/blocs/cart/cart_bloc.dart';
-import 'package:shop_app/blocs/products/products_bloc.dart';
+import 'package:shop_app/blocs/favorites/favorites_bloc.dart';
 import 'package:shop_app/router/router.gr.dart';
-import 'package:shop_app/screens/search/search_screen.dart';
+import 'package:shop_app/screens/favorites/favorites_grid.dart';
 import 'package:shop_app/widgets/app_drawer.dart';
 import 'package:shop_app/widgets/badge.dart';
-import 'package:shop_app/widgets/products_grid.dart';
 
 enum FilterOptions { favorites, all }
 
-class ProductsOverviewScreen extends StatelessWidget {
-  static const routeName = 'ProductsOverviewRoute';
+class FavoritesScreen extends StatelessWidget {
+  static const routeName = 'FavoritesRoute';
   static const routePath = '';
 
-  const ProductsOverviewScreen({Key? key}) : super(key: key);
+  const FavoritesScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('My Shop'),
+        centerTitle: true,
+        title: const Text('Favorites'),
         actions: [
-          IconButton(
-            onPressed: () async {
-              await showSearch(
-                context: context,
-                delegate: SearchScreen(),
-              );
-            },
-            icon: const Icon(Icons.search),
-          ),
           BlocBuilder<CartBloc, CartState>(
             builder: (context, state) => Badge(
               child: IconButton(
@@ -44,15 +35,15 @@ class ProductsOverviewScreen extends StatelessWidget {
         ],
       ),
       drawer: const AppDrawer(),
-      body: BlocBuilder<ProductsBloc, ProductsState>(
+      body: BlocBuilder<FavoritesBloc, FavoritesState>(
         builder: (context, state) {
           switch (state.status) {
-            case ProductStatus.initial:
-            case ProductStatus.loading:
+            case FavoriteStatus.initial:
+            case FavoriteStatus.loading:
               return const Center(child: CircularProgressIndicator());
-            case ProductStatus.success:
-              return ProductsGrid(products: state.products);
-            case ProductStatus.failure:
+            case FavoriteStatus.success:
+              return FavoritesGrid(favorites: state.favorites);
+            case FavoriteStatus.failure:
               return Center(child: Text(state.error));
           }
         },

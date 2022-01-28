@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:shop_app/blocs/authentication/authentication_bloc.dart';
 import 'package:shop_app/helpers/extensions.dart';
 import 'package:shop_app/models/auth/auth.dart';
 import 'package:shop_app/models/product.dart';
@@ -14,22 +15,31 @@ part 'user_products_bloc.freezed.dart';
 class UserProductsBloc extends Bloc<UserProductsEvent, UserProductsState> {
   UserProductsBloc({
     required this.productsRepository,
-    required this.userProfile,
+    required this.authenticationBloc,
   }) : super(const UserProductsState()) {
     on<LoadUserProducts>(_loadUserProducts);
     on<AddProduct>(_addProduct);
     on<EditProduct>(_editProduct);
     on<DeleteProduct>(_deleteProduct);
+
+    subscription = authenticationBloc.stream.listen((state) {
+      if (state.authStatus == AuthStatus.authenticated) {
+        userProfile = state.userProfile;
+      }
+    });
   }
 
   final ProductsRepository productsRepository;
-  final UserProfile userProfile;
+  final AuthenticationBloc authenticationBloc;
+  UserProfile? userProfile;
+
+  late StreamSubscription subscription;
 
   FutureOr<void> _loadUserProducts(
       LoadUserProducts event, Emitter<UserProductsState> emit) async {
     try {
       final products =
-          await productsRepository.getAllProducts(userId: userProfile.userId);
+          await productsRepository.getAllProducts(userId: userProfile!.userId);
 
       emit(state.copyWith(
           status: UserProductStatus.success, products: products));
@@ -42,7 +52,7 @@ class UserProductsBloc extends Bloc<UserProductsEvent, UserProductsState> {
       AddProduct event, Emitter<UserProductsState> emit) async {
     try {
       final Product newProduct = await productsRepository.addProduct(
-          event.product, userProfile.userId);
+          event.product, userProfile!.userId);
 
       emit(
         state.copyWith(
