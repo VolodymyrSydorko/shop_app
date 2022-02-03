@@ -6,9 +6,6 @@ import 'package:provider/provider.dart';
 import 'package:shop_app/blocs/products/products_bloc.dart';
 
 class ProductDetailScreen extends StatelessWidget {
-  static const routeName = 'ProductDetailRoute';
-  static const routePath = ':productId';
-
   final String productId;
 
   const ProductDetailScreen({

@@ -41,7 +41,7 @@ class ProductsGrid extends StatelessWidget {
           base64Url: product.base64Url,
           isFavorite: product.isFavorite,
           onTap: () {
-            context.router.push(ProductDetailRoute(productId: product.id));
+            context.pushRoute(ProductDetailRoute(productId: product.id));
           },
           onCartPressed: () {
             cart.add(

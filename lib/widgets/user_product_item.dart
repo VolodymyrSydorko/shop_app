@@ -38,7 +38,7 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               icon: const Icon(Icons.edit),
               onPressed: () {
-                context.router.push(EditProductRoute(productId: id));
+                context.pushRoute(EditProductRoute(productId: id));
               },
               color: Theme.of(context).primaryColor,
             ),

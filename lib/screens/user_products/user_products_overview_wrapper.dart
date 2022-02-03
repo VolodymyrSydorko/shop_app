@@ -4,17 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/blocs/user_products/user_products_bloc.dart';
 import 'package:shop_app/services/locator/locator.dart';
 
-class UserProductsWrapper extends StatelessWidget {
-  static const routeName = 'UserProductsTab';
-  static const routePath = 'user-products';
-
-  const UserProductsWrapper({Key? key}) : super(key: key);
+class UserProductsTabScreen extends StatelessWidget {
+  const UserProductsTabScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) =>
-          getIt.get<UserProductsBloc>()..add(const UserProductsEvent.load()),
+    return BlocProvider.value(
+      value: getIt.get<UserProductsBloc>()..add(const UserProductsEvent.load()),
       child: const AutoRouter(),
     );
   }

@@ -19,7 +19,6 @@ class NoAccountText extends StatelessWidget {
           style: TextStyle(fontSize: 16),
         ),
         GestureDetector(
-          onTap: () => context.router.push(const SignUpRoute()),
           child: const Text(
             "Sign Up",
             style: TextStyle(fontSize: 16, color: AppColors.primary),

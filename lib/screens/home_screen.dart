@@ -4,18 +4,15 @@ import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
 import 'package:shop_app/router/router.gr.dart';
 
 class HomeScreen extends StatelessWidget {
-  static const routeName = 'HomeRoute';
-  static const routePath = '/home';
-
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return AutoTabsScaffold(
       routes: const [
-        ProductsTab(),
-        FavoritesTab(),
-        UserProductsTab(),
+        ProductsOverviewTabRoute(),
+        FavoritesTabRoute(),
+        UserProductsTabRoute(),
       ],
       bottomNavigationBuilder: (_, tabsRouter) {
         return SalomonBottomBar(

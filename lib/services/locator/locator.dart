@@ -35,12 +35,8 @@ Future setupServiceLocator() async {
     authenticationBloc: getIt.get<AuthenticationBloc>(),
   ));
 
-  getIt.registerSingleton<Products>(
-      Products(productsRepository: getIt.get<ProductsRepository>()));
-
   getIt.registerSingleton<AppRouter>(
     AppRouter(
-        authGuard: AuthGuard(getIt.get<AuthenticationBloc>()),
         productDetailGuard: ProductDetailGuard(getIt.get<ProductsBloc>()),
         favoriteDetailGuard: FavoriteDetailGuard(getIt.get<FavoritesBloc>())),
   );

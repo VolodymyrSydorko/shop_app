@@ -4,11 +4,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/blocs/products/products_bloc.dart';
 import 'package:shop_app/services/services.dart';
 
-class ProductsOverviewWrapper extends StatelessWidget {
-  static const routeName = 'ProductsTab';
-  static const routePath = 'overview-products';
-
-  const ProductsOverviewWrapper({Key? key}) : super(key: key);
+class ProductsOverviewTabScreen extends StatelessWidget {
+  const ProductsOverviewTabScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

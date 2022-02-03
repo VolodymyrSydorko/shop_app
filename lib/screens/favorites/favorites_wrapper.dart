@@ -4,15 +4,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shop_app/blocs/favorites/favorites_bloc.dart';
 import 'package:shop_app/services/services.dart';
 
-class FavoritesWrapper extends StatelessWidget {
-  static const routeName = 'FavoritesTab';
-  static const routePath = 'favorites';
-
-  const FavoritesWrapper({Key? key}) : super(key: key);
+class FavoritesTabScreen extends StatelessWidget {
+  const FavoritesTabScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider<FavoritesBloc>.value(
+    return BlocProvider.value(
       value: getIt.get<FavoritesBloc>()..add(const FavoritesEvent.load()),
       child: const AutoRouter(),
     );

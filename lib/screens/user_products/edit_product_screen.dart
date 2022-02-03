@@ -9,9 +9,6 @@ import 'package:shop_app/blocs/user_products/user_products_bloc.dart';
 import '../../models/product.dart';
 
 class EditProductScreen extends StatefulWidget {
-  static const routeName = 'EditProductRoute';
-  static const routePath = ':productId';
-
   final String? productId;
 
   const EditProductScreen({

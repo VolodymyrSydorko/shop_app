@@ -5,6 +5,7 @@ import 'package:shop_app/screens/cart_screen.dart';
 import 'package:shop_app/screens/favorites/favorites_screen.dart';
 import 'package:shop_app/screens/favorites/favorites_wrapper.dart';
 import 'package:shop_app/screens/home_screen.dart';
+import 'package:shop_app/screens/loading_screen.dart';
 import 'package:shop_app/screens/products_overview/products_overview_wrapper.dart';
 import 'package:shop_app/screens/user_products/edit_product_screen.dart';
 import 'package:shop_app/screens/sign_in/sign_in_screen.dart';
@@ -12,8 +13,7 @@ import 'package:shop_app/screens/not_found_screen.dart';
 import 'package:shop_app/screens/orders_screen.dart';
 import 'package:shop_app/screens/products_overview/product_detail_screen.dart';
 import 'package:shop_app/screens/products_overview/products_overview_screen.dart';
-import 'package:shop_app/screens/session_screen.dart';
-import 'package:shop_app/screens/sign_up_screen.dart';
+import 'package:shop_app/screens/auth_flow_screen.dart';
 import 'package:shop_app/screens/user_products/user_products_overview_wrapper.dart';
 import 'package:shop_app/screens/user_products/user_products_screen.dart';
 import 'package:shop_app/screens/welcome/welcome_screen.dart';
@@ -22,106 +22,100 @@ import 'package:shop_app/screens/welcome/welcome_screen.dart';
   replaceInRouteName: 'Page|Screen,Route',
   routes: <AutoRoute>[
     AutoRoute(
-      path: SessionScreen.routePath,
-      name: SessionScreen.routeName,
-      page: SessionScreen,
+      path: '/',
+      name: 'MainRouter',
+      page: AuthFlowScreen,
       initial: true,
-    ),
-    AutoRoute(
-      path: WelcomeScreen.routePath,
-      name: WelcomeScreen.routeName,
-      page: WelcomeScreen,
-      initial: true,
-    ),
-    AutoRoute(
-      path: SignInScreen.routePath,
-      name: SignInScreen.routeName,
-      page: SignInScreen,
-    ),
-    AutoRoute(
-      path: SignUpScreen.routePath,
-      name: SignUpScreen.routeName,
-      page: SignUpScreen,
-    ),
-    AutoRoute(
-      path: HomeScreen.routePath,
-      name: HomeScreen.routeName,
-      page: HomeScreen,
       children: [
         AutoRoute(
-          path: ProductsOverviewWrapper.routePath,
-          name: ProductsOverviewWrapper.routeName,
-          page: ProductsOverviewWrapper,
+          path: '',
+          name: 'LoadingRouter',
+          page: LoadingScreen,
+        ),
+        AutoRoute(
+          path: 'app',
+          name: 'StartRouter',
+          page: EmptyRouterPage,
           children: [
             AutoRoute(
-              path: ProductsOverviewScreen.routePath,
-              name: ProductsOverviewScreen.routeName,
-              page: ProductsOverviewScreen,
-              guards: [AuthGuard],
+              path: '',
+              page: WelcomeScreen,
             ),
             AutoRoute(
-              path: ProductDetailScreen.routePath,
-              name: ProductDetailScreen.routeName,
-              page: ProductDetailScreen,
-              guards: [AuthGuard, ProductDetailGuard],
+              path: 'sign-in',
+              page: SignInScreen,
             ),
           ],
         ),
         AutoRoute(
-          path: FavoritesWrapper.routePath,
-          name: FavoritesWrapper.routeName,
-          page: FavoritesWrapper,
+          path: 'home',
+          name: 'HomeRouter',
+          page: EmptyRouterPage,
           children: [
             AutoRoute(
-              path: FavoritesScreen.routePath,
-              name: FavoritesScreen.routeName,
-              page: FavoritesScreen,
-              guards: [AuthGuard],
+              path: '',
+              page: HomeScreen,
+              children: [
+                AutoRoute(
+                  path: 'products-overview',
+                  page: ProductsOverviewTabScreen,
+                  children: [
+                    AutoRoute(
+                      path: '',
+                      page: ProductsOverviewScreen,
+                    ),
+                    AutoRoute(
+                      path: ':productId',
+                      page: ProductDetailScreen,
+                      guards: [ProductDetailGuard],
+                    ),
+                  ],
+                ),
+                AutoRoute(
+                  path: 'favorites',
+                  page: FavoritesTabScreen,
+                  children: [
+                    AutoRoute(
+                      path: '',
+                      page: FavoritesScreen,
+                    ),
+                    AutoRoute(
+                      path: ':productId',
+                      page: ProductDetailScreen,
+                      guards: [FavoriteDetailGuard],
+                    ),
+                  ],
+                ),
+                AutoRoute(
+                  path: 'user-products',
+                  page: UserProductsTabScreen,
+                  children: [
+                    AutoRoute(
+                      path: '',
+                      page: UserProductsScreen,
+                    ),
+                    AutoRoute(
+                      path: ':productId',
+                      page: EditProductScreen,
+                    ),
+                  ],
+                ),
+              ],
             ),
             AutoRoute(
-              path: ProductDetailScreen.routePath,
-              name: ProductDetailScreen.routeName,
-              page: ProductDetailScreen,
-              guards: [AuthGuard, FavoriteDetailGuard],
+              path: 'orders',
+              page: OrdersScreen,
+            ),
+            AutoRoute(
+              path: 'cart',
+              page: CartScreen,
             ),
           ],
         ),
-        AutoRoute(
-          path: UserProductsWrapper.routePath,
-          name: UserProductsWrapper.routeName,
-          page: UserProductsWrapper,
-          children: [
-            AutoRoute(
-              path: UserProductsScreen.routePath,
-              name: UserProductsScreen.routeName,
-              page: UserProductsScreen,
-              guards: [AuthGuard],
-            ),
-            AutoRoute(
-              path: EditProductScreen.routePath,
-              name: EditProductScreen.routeName,
-              page: EditProductScreen,
-              guards: [AuthGuard],
-            ),
-          ],
-        )
       ],
     ),
     AutoRoute(
-      path: OrdersScreen.routePath,
-      name: OrdersScreen.routeName,
-      page: OrdersScreen,
-      guards: [AuthGuard],
-    ),
-    AutoRoute(
-      path: CartScreen.routePath,
-      name: CartScreen.routeName,
-      page: CartScreen,
-      guards: [AuthGuard],
-    ),
-    AutoRoute(
-      path: NotFoundScreen.routePath,
-      name: NotFoundScreen.routeName,
+      path: 'not-found',
       page: NotFoundScreen,
     ),
     RedirectRoute(

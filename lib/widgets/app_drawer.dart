@@ -21,7 +21,10 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.shop),
             title: const Text('Shop'),
             onTap: () {
-              context.router.replace(const ProductsTab());
+              context.popRoute();
+              context.navigateTo(
+                const HomeRoute(children: [ProductsOverviewTabRoute()]),
+              );
             },
           ),
           const Divider(),
@@ -29,7 +32,8 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.payment),
             title: const Text('Orders'),
             onTap: () {
-              context.router.replace(const OrdersRoute());
+              context.popRoute();
+              context.navigateTo(const OrdersRoute());
             },
           ),
           const Divider(),
@@ -37,7 +41,9 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.edit),
             title: const Text('Manage Products'),
             onTap: () {
-              context.router.replace(const UserProductsTab());
+              context.popRoute();
+              context.navigateTo(
+                  const HomeRoute(children: [UserProductsTabRoute()]));
             },
           ),
           const Divider(),
@@ -45,7 +51,9 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.favorite),
             title: const Text('Favorites Products'),
             onTap: () {
-              context.router.replace(const FavoritesTab());
+              context.popRoute();
+              context
+                  .navigateTo(const HomeRoute(children: [FavoritesTabRoute()]));
             },
           ),
           const Divider(),
@@ -53,9 +61,7 @@ class AppDrawer extends StatelessWidget {
             leading: const Icon(Icons.edit),
             title: const Text('Log Out'),
             onTap: () async {
-              context.router.popUntilRoot();
-              context.router.replace(const SessionRoute());
-
+              context.popRoute();
               context
                   .read<AuthenticationBloc>()
                   .add(const AuthenticationEvent.logout());

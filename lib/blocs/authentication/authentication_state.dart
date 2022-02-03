@@ -1,19 +1,20 @@
 part of 'authentication_bloc.dart';
 
+enum AuthStatus {
+  authenticated,
+  unauthenticated,
+  initial,
+}
+
 @freezed
 class AuthenticationState with _$AuthenticationState {
   const factory AuthenticationState({
-    @Default(AuthStatus.unknown) AuthStatus authStatus,
+    @Default(AuthStatus.initial) AuthStatus authStatus,
     required UserProfile userProfile,
   }) = _AuthenticationState;
 
   factory AuthenticationState.initial() =>
       AuthenticationState(userProfile: UserProfile.empty());
-
-  factory AuthenticationState.tokenExpired() => AuthenticationState(
-        authStatus: AuthStatus.tokenExpired,
-        userProfile: UserProfile.empty(),
-      );
 
   factory AuthenticationState.authenticated(UserProfile userProfile) =>
       AuthenticationState(

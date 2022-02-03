@@ -17,9 +17,6 @@ import 'package:shop_app/widgets/buttons/socal_card.dart';
 import 'package:shop_app/widgets/no_account_text.dart';
 
 class SignInScreen extends StatelessWidget implements AutoRouteWrapper {
-  static const routeName = 'SignInRoute';
-  static const routePath = '/sign-in';
-
   const SignInScreen({Key? key}) : super(key: key);
 
   @override
@@ -180,9 +177,6 @@ class _AuthCardState extends State<AuthCard> {
             state.errorMessage != null) {
           await _showErrorDialog(state.errorMessage!);
         } else if (state.status == FormzStatus.submissionSuccess) {
-          context.router.popUntilRoot();
-          context.router.replace(const SessionRoute());
-
           context
               .read<AuthenticationBloc>()
               .add(AuthenticationEvent.loggedIn(state.userProfile!));

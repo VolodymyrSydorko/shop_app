@@ -4,7 +4,6 @@ import 'dart:convert';
 import 'package:bloc/bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shop_app/models/auth/auth_status.dart';
 import 'package:shop_app/models/auth/user_profile.dart';
 import 'package:shop_app/services/services.dart';
 
@@ -46,7 +45,7 @@ class AuthenticationBloc
       emit(AuthenticationState.unauthenticated());
     }
 
-    _autoLogout(profile.expiryDate, emit);
+    _autoLogout(profile.expiryDate);
   }
 
   FutureOr<void> _authLoggedIn(
@@ -56,7 +55,7 @@ class AuthenticationBloc
     if (profile.expiryDate.isAfter(DateTime.now())) {
       emit(AuthenticationState.authenticated(profile));
 
-      _autoLogout(profile.expiryDate, emit);
+      _autoLogout(profile.expiryDate);
 
       final prefs = await SharedPreferences.getInstance();
       prefs.setString(_userProfileKey, json.encode(profile.toJson()));
@@ -78,16 +77,15 @@ class AuthenticationBloc
     emit(AuthenticationState.unauthenticated());
   }
 
-  void _autoLogout(DateTime expiryDate, Emitter<AuthenticationState> emit) {
+  void _autoLogout(DateTime expiryDate) {
     _authTimer?.cancel();
 
     final timeToExpiry = expiryDate.difference(DateTime.now()).inSeconds;
-    _authTimer =
-        Timer(Duration(seconds: timeToExpiry), () => _tokenExpired(emit));
+    _authTimer = Timer(Duration(seconds: timeToExpiry), () => _tokenExpired());
   }
 
-  void _tokenExpired(Emitter<AuthenticationState> emit) {
-    emit(AuthenticationState.tokenExpired());
+  void _tokenExpired() {
+    add(const AuthenticationEvent.logout());
   }
 
   @override

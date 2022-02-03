@@ -12,9 +12,6 @@ import 'package:shop_app/widgets/products_grid.dart';
 enum FilterOptions { favorites, all }
 
 class ProductsOverviewScreen extends StatelessWidget {
-  static const routeName = 'ProductsOverviewRoute';
-  static const routePath = '';
-
   const ProductsOverviewScreen({Key? key}) : super(key: key);
 
   @override
@@ -35,7 +32,9 @@ class ProductsOverviewScreen extends StatelessWidget {
           BlocBuilder<CartBloc, CartState>(
             builder: (context, state) => Badge(
               child: IconButton(
-                onPressed: () => {context.router.push(const CartRoute())},
+                onPressed: () => {
+                  context.pushRoute(const CartRoute()),
+                },
                 icon: const Icon(Icons.shopping_cart),
               ),
               value: state.items.length.toString(),

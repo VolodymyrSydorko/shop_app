@@ -8,9 +8,6 @@ import '../../widgets/user_product_item.dart';
 import '../../widgets/app_drawer.dart';
 
 class UserProductsScreen extends StatelessWidget {
-  static const routeName = 'UserProductsRoute';
-  static const routePath = '';
-
   const UserProductsScreen({Key? key}) : super(key: key);
 
   @override
@@ -22,7 +19,7 @@ class UserProductsScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.add),
             onPressed: () {
-              context.router.push(EditProductRoute());
+              context.pushRoute(EditProductRoute());
             },
           ),
         ],

@@ -1,3 +1,3 @@
 class Constants {
-  static String get errorDefaultMessage => "An error occurerd";
+  static String get errorDefaultMessage => "An error occurred";
 }
